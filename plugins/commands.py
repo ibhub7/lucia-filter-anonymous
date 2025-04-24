@@ -97,7 +97,7 @@ async def start(client, message):
                 ],[
                     InlineKeyboardButton('• 𝙴𝙰𝚁𝙽 𝙼𝙾𝙽𝚈 𝚆𝙸𝚃𝙷 𝙱𝙾𝚃 💸', callback_data="earn"),
                 ],[
-                    InlineKeyboardButton('🌿 𝙹𝙾𝙸𝙽 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙷𝙰𝙽𝙽𝙴𝙻 🌿', url='https://t.me/+STRuLEmZ7AgxZjA1')
+                    InlineKeyboardButton('🌿 𝙹𝙾𝙸𝙽 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙷𝙰𝙽𝙽𝙴𝙻 🌿', url='https://t.me/+oSeOp6JKFho1OTU1')
                 ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
