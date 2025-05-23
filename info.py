@@ -77,7 +77,7 @@ SHORTENER_API3 = environ.get("SHORTENER_API3", "3226b9b3459f8ae390244d48b7edf408
 SHORTENER_WEBSITE3 = environ.get("SHORTENER_WEBSITE3", "seturl.in")
 
 TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "1800"))
-THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "54000"))
+THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "86400"))
 
 NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", True))
 MAX_B_TN = environ.get("MAX_B_TN", "8")
