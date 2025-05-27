@@ -76,8 +76,8 @@ SHORTENER_WEBSITE2 = environ.get("SHORTENER_WEBSITE2", "papajiurl.com")
 SHORTENER_API3 = environ.get("SHORTENER_API3", "3226b9b3459f8ae390244d48b7edf40801f0a344")
 SHORTENER_WEBSITE3 = environ.get("SHORTENER_WEBSITE3", "seturl.in")
 
-TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "1800"))
-THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "86400"))
+TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "86400"))
+THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "172800"))
 
 NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", True))
 MAX_B_TN = environ.get("MAX_B_TN", "8")
