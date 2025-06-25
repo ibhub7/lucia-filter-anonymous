@@ -53,7 +53,7 @@ DATABASE_URI2 = environ.get('DATABASE_URI2', "")
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/FilmCity_Request')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/Film_CityOfficial')
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/Arpitbotmovies')
-UPDATE_CHANNEL_LNK = environ.get('UPDATE_CHANNEL_LNK', 'https://t.me/+BvNWziMOpFg1ODg1')
+UPDATE_CHANNEL_LNK = environ.get('UPDATE_CHANNEL_LNK', 'https://t.me/Film_CityOfficial')
 
 AUTH_CHANNEL = environ.get("AUTH_CHANNEL", "-1002739491658 -1002163955891") # add multiple channels here, separated by space
 AUTH_CHANNEL = [int(ch) for ch in AUTH_CHANNEL.strip().split()] if AUTH_CHANNEL else []
