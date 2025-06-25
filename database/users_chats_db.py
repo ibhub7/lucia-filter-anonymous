@@ -12,21 +12,26 @@ class Database:
         self.col = self.db.users
         self.grp = self.db.groups
         self.users = self.db.uersz
-        self.req = self.db.requests[str(AUTH_REQ_CHANNEL)]
         self.botcol = self.db.bot_settings
         self.misc = self.db.misc
         self.verify_id = self.db.verify_id 
         self.codes = self.db.codes
         self.connection = self.db.connections
 
-    async def find_join_req(self, id):
-        return bool(await self.req.find_one({'id': id})) 
+    async def find_join_req(self, id, chnl):
+        chnl = str(chnl)
+        return bool(await self.db.request[chnl].find_one({'id': id})) 
      
-    async def add_join_req(self, id):
-        await self.req.insert_one({'id': id})
+    async def add_join_req(self, id, chnl):
+        chnl = str(chnl)
+        await self.db.request[chnl].insert_one({'id': id})
 
     async def del_join_req(self):
-        await self.req.drop()
+        if AUTH_REQ_CHANNEL:
+            for c in AUTH_REQ_CHANNEL:
+                c = str(c)
+            result = await self.db.request[c].delete_many({})
+            print(result)
 
     def new_user(self, id, name):
         return dict(
@@ -412,5 +417,3 @@ class Database:
         
 db = Database(DATABASE_URI, DATABASE_NAME)    
 db2 = Database(DATABASE_URI2, DATABASE_NAME)
-
-

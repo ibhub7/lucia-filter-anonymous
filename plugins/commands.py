@@ -163,16 +163,20 @@ async def start(client, message):
 
     try:
         settings = await get_settings(int(data.split("_", 2)[1]))
-        fsub_id_list = settings.get('fsub_id', None)
+        fsub_id_list = settings.get('fsub_id', [])
         btn = []
         i = 1
-        # If no fsub_id set, fallback to AUTH_CHANNEL
-        if not fsub_id_list and AUTH_CHANNEL:
-            fsub_id_list = [x for x in AUTH_CHANNEL]
-        # Handle force subscription for each channel
+        fsub_id_list = fsub_id_list + AUTH_CHANNEL if AUTH_CHANNEL else fsub_id_list
+        fsub_id_list = fsub_id_list + AUTH_REQ_CHANNEL if AUTH_REQ_CHANNEL else fsub_id_list
+        
         if fsub_id_list:
+            fsub_ids = [] # for check duplicate
             for chnl in fsub_id_list:
-                if AUTH_REQ_CHANNEL and chnl == AUTH_REQ_CHANNEL and not await is_req_subscribed(client, message):
+                if chnl not in fsub_ids:
+                    fsub_ids.append(chnl)
+                else:
+                    continue
+                if AUTH_REQ_CHANNEL and chnl in AUTH_REQ_CHANNEL and not await is_req_subscribed(client, message, chnl):
                     try:
                         invite_link = await client.create_chat_invite_link(chnl, creates_join_request=True)
                     except ChatAdminRequired:
@@ -181,7 +185,7 @@ async def start(client, message):
                     btn.append([
                         InlineKeyboardButton(f"⛔️ ᴊᴏɪɴ ɴᴏᴡ channel {i}⛔️", url=invite_link.invite_link)
                     ])
-                elif chnl != AUTH_REQ_CHANNEL and not await is_subscribed(client, message.from_user.id, chnl):
+                elif chnl not in AUTH_REQ_CHANNEL and not await is_subscribed(client, message.from_user.id, chnl):
                     try:
                         invite_link = await client.create_chat_invite_link(chnl)
                     except ChatAdminRequired:
