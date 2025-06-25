@@ -242,8 +242,7 @@ Nᴀᴍᴇ : {}
 Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
     CAPTION = """<b><a href="https://t.me/Arpitbotmovies">📂Fɪʟᴇɴᴀᴍᴇ : {file_name}</a>  
-    
-Jᴏɪɴ Us ➠ @Film_CityOfficial"""
+    Jᴏɪɴ Us ➠ @Film_CityOfficial"""
 
     IMDB_TEMPLATE_TXT = """
 <b>🏷 Title</b>: <a href={url}>{title}</a>
