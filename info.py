@@ -55,11 +55,7 @@ CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/Film_CityOfficial')
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/Arpitbotmovies')
 UPDATE_CHANNEL_LNK = environ.get('UPDATE_CHANNEL_LNK', 'https://t.me/Film_CityOfficial')
 
-AUTH_CHANNEL = environ.get("AUTH_CHANNEL", "-1002739491658 -1002163955891") # add multiple channels here, separated by space
-AUTH_CHANNEL = [int(ch) for ch in AUTH_CHANNEL.strip().split()] if AUTH_CHANNEL else []
-AUTH_REQ_CHANNEL = environ.get('AUTH_REQ_CHANNEL', '-1002739491658') # use this channel as auth request channel, you need to add this channel in AUTH_CHANNEL variable also
-if AUTH_REQ_CHANNEL:
-    AUTH_REQ_CHANNEL = int(AUTH_REQ_CHANNEL)
+
 
 IS_VERIFY = is_enabled('IS_VERIFY', False)
 LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '-1002074744533'))
