@@ -89,7 +89,7 @@ async def start(client, message):
         buttons = [[
                     InlineKeyboardButton('✯ 𝙰𝙳𝙳 𝙼𝙴 𝚃𝙾 𝚈𝙾𝚄𝚁 𝙶𝚁𝙾𝚄𝙿 ✯', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true')
                 ],[
-                    InlineKeyboardButton('• 𝙼𝙾𝚅𝙸𝙴 𝙶𝚁𝙾𝚄𝙿 🎭', url='https://t.me/MRN_Movies_Search_Group'),
+                    InlineKeyboardButton('• 𝙼𝙾𝚅𝙸𝙴 𝙶𝚁𝙾𝚄𝙿 🎭', url='https://t.me/Movies_Tv_Serial_Request'),
                     InlineKeyboardButton('• 𝙿𝚁𝙴𝙼𝙸𝚄𝙼 🎫', callback_data="premium"),
                 ],[
                     InlineKeyboardButton('• 𝙷𝙴𝙻𝙿 ⚙️', callback_data='features'),
@@ -97,7 +97,7 @@ async def start(client, message):
                 ],[
                     InlineKeyboardButton('• 𝙴𝙰𝚁𝙽 𝙼𝙾𝙽𝚈 𝚆𝙸𝚃𝙷 𝙱𝙾𝚃 💸', callback_data="earn"),
                 ],[
-                    InlineKeyboardButton('🌿 𝙹𝙾𝙸𝙽 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙷𝙰𝙽𝙽𝙴𝙻 🌿', url='https://t.me/+oSeOp6JKFho1OTU1')
+                    InlineKeyboardButton('🌿 𝙹𝙾𝙸𝙽 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙷𝙰𝙽𝙽𝙴𝙻 🌿', url='https://t.me/MRN_RIPPER')
                 ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
