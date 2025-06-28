@@ -50,31 +50,31 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'SilentXBotz_files')
 MULTIPLE_DB = is_enabled(os.environ.get('MULTIPLE_DB', "False"), False) # Type True For Turn On MULTIPLE DB FUNTION 
 DATABASE_URI2 = environ.get('DATABASE_URI2', "")
 
-GRP_LNK = environ.get('GRP_LNK', 'https://t.me/MRN_Movies_Search_Group')
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/Movies_Tv_Serial_Request')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/ALL_TV_SERIAL_BACKUP')
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/mimam_officialx')
 UPDATE_CHANNEL_LNK = environ.get('UPDATE_CHANNEL_LNK', 'https://t.me/MRN_RIPPER')
 
-AUTH_CHANNEL = int(environ.get('AUTH_CHANNEL', '-1002232443823'))
-AUTH_REQ_CHANNEL = int(environ.get('AUTH_REQ_CHANNEL', '-1002232443823'))
+AUTH_CHANNEL = int(environ.get('AUTH_CHANNEL', '-1002745555397'))
+AUTH_REQ_CHANNEL = int(environ.get('AUTH_REQ_CHANNEL', '-1002745555397'))
 
 IS_VERIFY = is_enabled('IS_VERIFY', True)
 LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '-1002338765286'))
 LOG_API_CHANNEL = int(environ.get('LOG_API_CHANNEL', '-1002338765286'))
 VERIFY_IMG = environ.get("VERIFY_IMG", "https://files.catbox.moe/8tqvho.jpg")
 
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/MRN_Tutorial/1666")
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/MRN_Tutorial/1805")
 TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/MRN_Tutorial/1805")
-TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/MRN_Tutorial/1671")
+TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/MRN_Tutorial/1805")
 
-SHORTENER_API = environ.get("SHORTENER_API", "931dc3d2b822191032f43d523eae9de35fcc808c")
-SHORTENER_WEBSITE = environ.get("SHORTENER_WEBSITE", "shortner.in")
+SHORTENER_API = environ.get("SHORTENER_API", "f2566f9573335044e60a2d14d537931e0a9ecd8d")
+SHORTENER_WEBSITE = environ.get("SHORTENER_WEBSITE", "papajiurl.com")
 
 SHORTENER_API2 = environ.get("SHORTENER_API2", "f2566f9573335044e60a2d14d537931e0a9ecd8d")
 SHORTENER_WEBSITE2 = environ.get("SHORTENER_WEBSITE2", "papajiurl.com")
 
-SHORTENER_API3 = environ.get("SHORTENER_API3", "3226b9b3459f8ae390244d48b7edf40801f0a344")
-SHORTENER_WEBSITE3 = environ.get("SHORTENER_WEBSITE3", "seturl.in")
+SHORTENER_API3 = environ.get("SHORTENER_API3", "f2566f9573335044e60a2d14d537931e0a9ecd8d")
+SHORTENER_WEBSITE3 = environ.get("SHORTENER_WEBSITE3", "papajiurl.com")
 
 TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "86400"))
 THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "172800"))
