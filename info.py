@@ -50,7 +50,7 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'techvjcollection')
 MULTIPLE_DB = is_enabled(os.environ.get('MULTIPLE_DB', "False"), False) # Type True For Turn On MULTIPLE DB FUNTION 
 DATABASE_URI2 = environ.get('DATABASE_URI2', "")
 
-GRP_LNK = environ.get('GRP_LNK', 'https://t.me/FilmCity_Request')
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+auBaIAnB4R84YzJl')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/Film_CityOfficial')
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/Arpitbotmovies')
 UPDATE_CHANNEL_LNK = environ.get('UPDATE_CHANNEL_LNK', 'https://t.me/Film_CityOfficial')
@@ -121,9 +121,9 @@ if 'DYNO' in environ:
     APP_NAME = environ.get('APP_NAME')
 else:
     ON_HEROKU = False
-BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', 'https://unusual-kaia-talkmovies-89b462ed.koyeb.app/'))
+BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', 'https://flaky-aili-filter-bot-456880b4.koyeb.app/'))
 FQDN = str(getenv('FQDN', BIND_ADRESS)) if not ON_HEROKU or getenv('FQDN') else APP_NAME+'.herokuapp.com'
-URL = "https://unusual-kaia-talkmovies-89b462ed.koyeb.app/".format(FQDN) if ON_HEROKU or NO_PORT else "https://unusual-kaia-talkmovies-89b462ed.koyeb.app/".format(FQDN, PORT)
+URL = "https://flaky-aili-filter-bot-456880b4.koyeb.app/".format(FQDN) if ON_HEROKU or NO_PORT else "https://flaky-aili-filter-bot-456880b4.koyeb.app/".format(FQDN, PORT)
 SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
 WORKERS = int(environ.get('WORKERS', '4'))
 SESSION_NAME = str(environ.get('SESSION_NAME', 'SilentXBotz'))
@@ -137,9 +137,9 @@ else:
     ON_HEROKU = False
 HAS_SSL = bool(getenv('HAS_SSL', False))
 if HAS_SSL:
-    URL = "https://unusual-kaia-talkmovies-89b462ed.koyeb.app/".format(FQDN)
+    URL = "https://flaky-aili-filter-bot-456880b4.koyeb.app/".format(FQDN)
 else:
-    URL = "https://unusual-kaia-talkmovies-89b462ed.koyeb.app/".format(FQDN)
+    URL = "https://flaky-aili-filter-bot-456880b4.koyeb.app/".format(FQDN)
 
 
 REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚", "🆒", "👻", "😁"]
