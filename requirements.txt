@@ -1,6 +1,6 @@
 pyrofork==2.3.45
 tgcrypto-pyrofork
-pymongo[srv]==4.11.1
+pymongo[srv]==4.13.2
 motor==3.7.0
 marshmallow==4.0.0
 umongo
