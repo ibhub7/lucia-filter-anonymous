@@ -869,7 +869,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}'),
                     InlineKeyboardButton('ᴇɴᴀʙʟᴇ' if settings["auto_delete"] else 'ᴅɪꜱᴀʙʟᴇ',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}')
-                ],		    
+                ],	
+				[
+					InlineKeyboardButton('ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ᴛɪᴍᴇ',
+										 callback_data=f'setgs#auto_del_time#{settings.get("auto_del_time", AUTO_DELETE_TIME)}#{str(grp_id)}'),
+					InlineKeyboardButton(f'{settings.get("auto_del_time", 30)}s',    
+										 callback_data=f'setgs#auto_del_time#{settings.get("auto_del_time", AUTO_DELETE_TIME)}#{str(grp_id)}')
+				],
                 [
                     InlineKeyboardButton('ᴍᴀx ʙᴜᴛᴛᴏɴꜱ',
                                          callback_data=f'setgs#max_btn#{settings["max_btn"]}#{str(grp_id)}'),
@@ -944,6 +950,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton('ᴇɴᴀʙʟᴇ' if settings["auto_delete"] else 'ᴅɪꜱᴀʙʟᴇ',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}')
                 ],
+				[
+					InlineKeyboardButton('ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ᴛɪᴍᴇ',
+										 callback_data=f'setgs#auto_del_time#{settings.get("auto_del_time", AUTO_DELETE_TIME)}#{str(grp_id)}'),
+					InlineKeyboardButton(f'{settings.get("auto_del_time", 30)}s',    
+										 callback_data=f'setgs#auto_del_time#{settings.get("auto_del_time", AUTO_DELETE_TIME)}#{str(grp_id)}')
+				],
                 [
                     InlineKeyboardButton('ᴍᴀx ʙᴜᴛᴛᴏɴꜱ',
                                          callback_data=f'setgs#max_btn#{settings["max_btn"]}#{str(grp_id)}'),
@@ -1851,12 +1863,19 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not await is_check_admin(client, int(grp_id), userid):
             await query.answer(script.ALRT_TXT, show_alert=True)
             return
-        if status == "True":
-            await save_group_settings(int(grp_id), set_type, False)
-            await query.answer("ᴏꜰꜰ ✗")
+			
+        if set_type == "auto_del_time":
+            new_time = 60 if status == "30" else 120 if status == "60" else AUTO_DELETE_TIME if status == "120" else 30
+            await save_group_settings(int(grp_id), "auto_del_time", new_time)
+            await query.answer(f"Auto Delete Time set to {new_time}s ✓")
         else:
-            await save_group_settings(int(grp_id), set_type, True)
-            await query.answer("ᴏɴ ✓")
+            if status == "True":
+                await save_group_settings(int(grp_id), set_type, False)
+                await query.answer("ᴏꜰꜰ ✗")
+            else:
+                await save_group_settings(int(grp_id), set_type, True)
+                await query.answer("ᴏɴ ✓")
+				
         settings = await get_settings(int(grp_id))
         if settings is not None:
             buttons = [
@@ -1888,6 +1907,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton('ᴇɴᴀʙʟᴇ' if settings["auto_delete"] else 'ᴅɪꜱᴀʙʟᴇ',
                                          callback_data=f'setgs#auto_delete#{settings["auto_delete"]}#{str(grp_id)}')
                 ],
+				[
+					InlineKeyboardButton('ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ᴛɪᴍᴇ',
+										 callback_data=f'setgs#auto_del_time#{settings.get("auto_del_time", AUTO_DELETE_TIME)}#{str(grp_id)}'),
+					InlineKeyboardButton(f'{settings.get("auto_del_time", 30)}s',    
+										 callback_data=f'setgs#auto_del_time#{settings.get("auto_del_time", AUTO_DELETE_TIME)}#{str(grp_id)}')
+				],
                 [
                     InlineKeyboardButton('ᴍᴀx ʙᴜᴛᴛᴏɴꜱ',
                                          callback_data=f'setgs#max_btn#{settings["max_btn"]}#{str(grp_id)}'),
@@ -2007,6 +2032,7 @@ async def auto_filter(client, msg, spoll=False):
     cur_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     time_difference = timedelta(hours=cur_time.hour, minutes=cur_time.minute, seconds=(cur_time.second+(cur_time.microsecond/1000000))) - timedelta(hours=curr_time.hour, minutes=curr_time.minute, seconds=(curr_time.second+(curr_time.microsecond/1000000)))
     remaining_seconds = "{:.2f}".format(time_difference.total_seconds())
+    DELETE_TIME = settings.get("auto_del_time", AUTO_DELETE_TIME)
     TEMPLATE = script.IMDB_TEMPLATE_TXT
     if imdb:
         cap = TEMPLATE.format(
