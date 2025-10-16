@@ -281,6 +281,7 @@ async def start(client, message):
             size = get_size(files1.file_size)
             f_caption = files1.caption
             settings = await get_settings(int(grp_id))
+            DELETE_TIME = settings.get("auto_del_time", AUTO_DELETE_TIME)
             SILENTX_CAPTION = settings.get('caption', CUSTOM_FILE_CAPTION)
             if SILENTX_CAPTION:
                 try:
@@ -342,6 +343,7 @@ async def start(client, message):
             size=get_size(file.file_size)
             f_caption = f"<code>{title}</code>"
             settings = await get_settings(int(grp_id))
+            DELETE_TIME = settings.get("auto_del_time", AUTO_DELETE_TIME)
             SILENTX_CAPTION = settings.get('caption', CUSTOM_FILE_CAPTION)
             if SILENTX_CAPTION:
                 try:
@@ -362,7 +364,8 @@ async def start(client, message):
     title = clean_filename(files.file_name)
     size = get_size(files.file_size)
     f_caption = files.caption
-    settings = await get_settings(int(grp_id))            
+    settings = await get_settings(int(grp_id))         
+    DELETE_TIME = settings.get("auto_del_time", AUTO_DELETE_TIME)
     SILENTX_CAPTION = settings.get('caption', CUSTOM_FILE_CAPTION)
     if SILENTX_CAPTION:
         try:
