@@ -1121,3 +1121,12 @@ async def reset_all_settings(client, message):
     except Exception as e:
         LOGGER.error(f"Error Processing Reset All Settings Command: {str(e)}")
         await message.reply("<b>ᴇʀʀᴏʀ 🚫.oᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴅᴇʟᴇᴛɪɴɢ ɢʀᴏᴜᴘ ꜱᴇᴛᴛɪɴɢꜱ! ᴘʟᴇᴀꜱᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ.</b>", quote=True)       
+
+@Client.on_message(filters.command("dropgroups") & filters.user(ADMINS))
+async def drop_groups_command(client, message):
+    try:
+        await db.grp.drop()
+        await message.reply("The 'groups' Collection Has Been Deleted.")
+    except Exception as e:
+        await message.reply(f"Failed to delete collection: {e}")
+        
