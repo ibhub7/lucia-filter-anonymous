@@ -151,40 +151,42 @@ async def get_imdb_details(name):
         LOGGER.error(f"IMDB fetch error: {e}")
         return {}
 
-async def fetch_movie_poster(title: str, year: Optional[int] = None) -> Optional[str]:
-    base_url = "https://image.silentxbotz.tech/api/v1/poster"
-    params = {"title": title.strip()}    
+async def fetch_movie_poster(title: str, year: Optional[int] = None) -> Optional[bytes]:
+    base_url = "https://image.silentxbotz.tech/api/v2/poster"
+    params = {"title": title.strip()}
     if year is not None:
         params["year"] = str(year)
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(
-                base_url,
-                params=params,
-                timeout=aiohttp.ClientTimeout(total=20)
-            ) as response:
-                if response.status == 200:
-                    image_data = await response.read()
-                    return image_data                
-                response_text = await response.text()
-                if response.status == 400:
-                    raise ValueError(f"Invalid request: {response_text}")
-                elif response.status == 404:
-                    raise ValueError(f"No poster found for: {title}")
-                elif response.status == 500:
-                    raise ValueError(f"Server error: {response_text}")
-                else:
-                    raise ValueError(f"API error: HTTP {response.status} - {response_text}")
+            async with session.get(base_url, params=params, timeout=aiohttp.ClientTimeout(total=20)) as response:
+                if response.status != 200:
+                    response_text = await response.text()
+                    raise ValueError(f"Failed to fetch metadata: HTTP {response.status}")
+                data = await response.json()
+            backdrops_by_lang = data.get("backdrops", {}).get("by_language", {})
+            preferred_langs = []
+            if "original_language" in data:
+                preferred_langs.append(data["original_language"])
+            preferred_langs.extend(["en", "unknown"])
+            for lang in preferred_langs:
+                backdrops = backdrops_by_lang.get(lang, [])
+                if backdrops:
+                    best_backdrop_url = backdrops[0]["url"]
+                    async with session.get(best_backdrop_url, timeout=aiohttp.ClientTimeout(total=20)) as img_resp:
+                        if img_resp.status == 200:
+                            return await img_resp.read()
+                        else:
+                            raise ValueError(f"Failed To Fetch Backdrop Image: HTTP {img_resp.status}")
+            raise ValueError("No Language-Specific Backdrops Found")
     except aiohttp.ClientError as e:
-        LOGGER.error(f"Network error occurred: {str(e)}")
+        LOGGER.error(f"Network Error Occurred: {str(e)}")
     except asyncio.TimeoutError:
-        LOGGER.error("Request timed out after 20 seconds")
+        LOGGER.error("Request Timed Out!")
     except ValueError as e:
         LOGGER.error(str(e))
     except Exception as e:
-        LOGGER.error(f"Unexpected error: {str(e)}")   
+        LOGGER.error(f"Unexpected Error: {str(e)}")
     return None
-
 
 def generate_unique_id(movie_name):
     return hashlib.md5(movie_name.encode('utf-8')).hexdigest()[:5]
