@@ -25,6 +25,7 @@ SILENTX_PREMIUM_UPDATE = """
 <blockquote>🎬 𝕻ℝ𝔼𝕄𝕀𝕌𝕄 𝕄𝕆𝕍𝕀𝔼 𝕌ℙ𝔻𝔸𝕋𝔼 🎥</blockquote>
 
 <b><u>{}</u></b> <code>#{}</code>
+
 <code>━━━━━━━━━━━━━━━━━━</code>
 <b>🔈 Audio</b>: {}
 <b>📺 Format</b>: {}
@@ -58,6 +59,7 @@ async def media(bot, message):
             await send_movie_update(bot, file_name=media.file_name, caption=media.caption)
     except Exception as e:
         LOGGER.error(f"Error In Movie Update - {e}")
+        pass
 
 async def send_movie_update(bot, file_name, caption):
     try:
