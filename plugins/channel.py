@@ -10,33 +10,40 @@ import requests
 from info import *
 from utils import *
 from logging_helper import LOGGER
-from typing import Optional
+from typing import Optional, Dict, Any
 from datetime import datetime
 from pyrogram import Client, filters
 from database.ia_filterdb import save_file
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.enums import ParseMode
 
 CAPTION_LANGUAGES = ["Bhojpuri", "Hindi", "Bengali", "Tamil", "English", "Bangla", "Telugu", "Malayalam", "Kannada", "Marathi", "Punjabi", "Bengoli", "Gujrati", "Korean", "Gujarati", "Spanish", "French", "German", "Chinese", "Arabic", "Portuguese", "Russian", "Japanese", "Odia", "Assamese", "Urdu"]
 
-SILENTX_UPDATE_CAPTION = """𝖭𝖤𝖶 𝖥𝖨𝖫𝖤 𝖠𝖣𝖣𝖤𝖣 ✅
+DEFAULT_IMAGE_URL = "https://te.legra.ph/file/88d845b4f8a024a71465d.jpg"
 
-{} #{}
-📺 𝖥𝗈𝗋𝗆𝖺𝗍 - {}
-🔰 𝖰𝗎𝖺𝗅𝗂𝗍𝗒 - {}
-🔈 𝖠𝗎𝖽𝗂𝗈 - {}
-🖇️ <a href="{}">𝖨𝖬𝖣𝖡 𝖨𝗇𝖿𝗈</a>
+SILENTX_PREMIUM_UPDATE = """
+<blockquote>🎬 𝕻ℝ𝔼𝕄𝕀𝕌𝕄 𝕄𝕆𝕍𝕀𝔼 𝕌ℙ𝔻𝔸𝕋𝔼 🎥</blockquote>
+
+<b><u>{}</u></b> <code>#{}</code>
+<code>━━━━━━━━━━━━━━━━━━</code>
+<b>🔈 Audio</b>: {}
+<b>📺 Format</b>: {}
+
+<code>━━━━━━━━━━━━━━━━━━</code>
+<b>🎭 Director</b>: {}
+<b>📅 Release</b>: {}
+<b>⭐ IMDb</b>: {}/10 (<code>{}</code> votes)
+<b>🏷️ Genres</b>: {}
+<code>━━━━━━━━━━━━━━━━━━</code>
+
+<b>⚡ Powered By @SilentXBotz</b>
 """
 
 notified_movies = set()
-user_reactions = {}
-reaction_counts = {}
-
 media_filter = filters.document | filters.video | filters.audio
 
 @Client.on_message(filters.chat(CHANNELS) & media_filter)
 async def media(bot, message):
-    """Media Handler"""
     for file_type in ("document", "video", "audio"):
         media = getattr(message, file_type, None)
         if media is not None:
@@ -51,11 +58,10 @@ async def media(bot, message):
             await send_movie_update(bot, file_name=media.file_name, caption=media.caption)
     except Exception as e:
         LOGGER.error(f"Error In Movie Update - {e}")
-        pass
 
 async def send_movie_update(bot, file_name, caption):
     try:
-        file_name = await movie_name_format(file_name)
+        file_name = await movie_name_format(file_name)        
         caption = await movie_name_format(caption)
         year_match = re.search(r"\b(19|20)\d{2}\b", caption)
         year = year_match.group(0) if year_match else None      
@@ -67,151 +73,163 @@ async def send_movie_update(bot, file_name, caption):
             file_name = file_name[:file_name.find(season) + 1]
         quality = await get_qualities(caption) or "HDRip"
         pixel = await get_pixels(caption) or "720p"
-        language = ", ".join([lang for lang in CAPTION_LANGUAGES if lang.lower() in caption.lower()]) or "Not Idea"
+        language = await get_languages(caption) or "Multi-Audio"      
         if file_name in notified_movies:
             return 
-        notified_movies.add(file_name)
-        imdb_data = await get_imdb_details(file_name)
-        title = imdb_data.get("title", file_name)
-        imdb_link = imdb_data.get("url", "") if imdb_data else ""
-        kind = imdb_data.get("kind", "").strip().upper().replace(" ", "_") if imdb_data else ""
-        poster = await fetch_movie_poster(title, year)        
+        notified_movies.add(file_name)      
+        tmdb_data = await fetch_tmdb_data(file_name, year)
         search_movie = file_name.replace(" ", "-")
-        unique_id = generate_unique_id(search_movie)
-        reaction_counts[unique_id] = {"❤️": 0, "👍": 0, "👎": 0, "🔥": 0}
-        user_reactions[unique_id] = {}        
-        full_caption = SILENTX_UPDATE_CAPTION.format(file_name, kind, quality, pixel, language, imdb_link)
-        buttons = [[
-            InlineKeyboardButton(f"❤️ {reaction_counts[unique_id]['❤️']}", callback_data=f"r_{unique_id}_{search_movie}_heart"),                
-            InlineKeyboardButton(f"👍 {reaction_counts[unique_id]['👍']}", callback_data=f"r_{unique_id}_{search_movie}_like"),
-            InlineKeyboardButton(f"👎 {reaction_counts[unique_id]['👎']}", callback_data=f"r_{unique_id}_{search_movie}_dislike"),
-            InlineKeyboardButton(f"🔥 {reaction_counts[unique_id]['🔥']}", callback_data=f"r_{unique_id}_{search_movie}_fire")
-        ],[
-            InlineKeyboardButton('Get File', url=f'https://telegram.me/{temp.U_NAME}?start=getfile-{search_movie}')
-        ]]
-        if poster:
-            photo_file = io.BytesIO(poster)
-            photo_file.name = await generate_random_filename()
-            await bot.send_photo(chat_id=MOVIE_UPDATE_CHANNEL, photo=photo_file, caption=full_caption, reply_markup=InlineKeyboardMarkup(buttons))    
-        else:
-            image_url = "https://te.legra.ph/file/88d845b4f8a024a71465d.jpg"   
-            await bot.send_photo(chat_id=MOVIE_UPDATE_CHANNEL, photo=image_url, caption=full_caption, reply_markup=InlineKeyboardMarkup(buttons))                
+        if not tmdb_data:
+            return          
+        full_caption = SILENTX_PREMIUM_UPDATE.format(
+            escape_html(tmdb_data["title"]),
+            tmdb_data["kind"],
+            escape_html(language),
+            "MKV" if "mkv" in file_name.lower() else "MP4",
+            escape_html(tmdb_data["director"] or "N/A"),
+            escape_html(tmdb_data["release_date"] or "TBA"),
+            tmdb_data["vote_average"],
+            tmdb_data["vote_count"],
+            escape_html(", ".join(tmdb_data["genres"][:3]))
+            
+        )        
+        await send_with_visual(bot, full_caption, tmdb_data, search_movie)        
     except Exception as e:
-        LOGGER.error(f"Error in send_movie_update: {e}")
+        LOGGER.error(f"Error In Movie Update: {e}")
 
-@Client.on_callback_query(filters.regex(r"^r_"))
-async def reaction_handler(client, query):
-    try:
-        data = query.data.split("_")
-        if len(data) != 4:
-            return        
-        unique_id = data[1]
-        search_movie = data[2]
-        new_reaction = data[3]
-        user_id = query.from_user.id
-        emoji_map = {"heart": "❤️", "like": "👍", "dislike": "👎", "fire": "🔥"}
-        if new_reaction not in emoji_map:
-            return
-        new_emoji = emoji_map[new_reaction]       
-        if unique_id not in reaction_counts:
-            return
-        if user_id in user_reactions[unique_id]:
-            old_emoji = user_reactions[unique_id][user_id]
-            if old_emoji == new_emoji:
-                return 
-            else:
-                reaction_counts[unique_id][old_emoji] -= 1
-        user_reactions[unique_id][user_id] = new_emoji
-        reaction_counts[unique_id][new_emoji] += 1
-        updated_buttons = [[
-            InlineKeyboardButton(f"❤️ {reaction_counts[unique_id]['❤️']}", callback_data=f"r_{unique_id}_{search_movie}_heart"),                
-            InlineKeyboardButton(f"👍 {reaction_counts[unique_id]['👍']}", callback_data=f"r_{unique_id}_{search_movie}_like"),
-            InlineKeyboardButton(f"👎 {reaction_counts[unique_id]['👎']}", callback_data=f"r_{unique_id}_{search_movie}_dislike"),
-            InlineKeyboardButton(f"🔥 {reaction_counts[unique_id]['🔥']}", callback_data=f"r_{unique_id}_{search_movie}_fire")
-        ],[
-            InlineKeyboardButton('Get File', url=f'https://telegram.me/{temp.U_NAME}?start=getfile-{search_movie}')
-        ]]
-        await query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(updated_buttons))
-    except Exception as e:
-        LOGGER.error("Reaction error:", e)
-        
-async def get_imdb_details(name):
-    try:
-        formatted_name = await movie_name_format(name)
-        imdb = await get_poster(formatted_name)
-        if not imdb:
-            return {}
-        return {
-            "title": imdb.get("title", formatted_name),
-            "kind": imdb.get("kind", "Movie"),
-            "year": imdb.get("year"),
-            "url" : imdb.get("url")
-        }
-    except Exception as e:
-        LOGGER.error(f"IMDB fetch error: {e}")
-        return {}
+def escape_html(text: str) -> str:
+    if not text:
+        return ""
+    return str(text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
-async def fetch_movie_poster(title: str, year: Optional[int] = None) -> Optional[bytes]:
+async def fetch_tmdb_data(title: str, year: str = None) -> Optional[Dict[str, Any]]:
     base_url = "https://image.silentxbotz.tech/api/v2/poster"
     params = {"title": title.strip()}
-    if year is not None:
-        params["year"] = str(year)
+    if year:
+        params["year"] = year
+        
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(base_url, params=params, timeout=aiohttp.ClientTimeout(total=20)) as response:
+            async with session.get(base_url, params=params, timeout=aiohttp.ClientTimeout(total=25)) as response:
                 if response.status != 200:
-                    response_text = await response.text()
-                    raise ValueError(f"Failed to fetch metadata: HTTP {response.status}")
+                    return None
                 data = await response.json()
-            backdrops_by_lang = data.get("backdrops", {}).get("by_language", {})
-            preferred_langs = []
-            if "original_language" in data:
-                preferred_langs.append(data["original_language"])
-            preferred_langs.extend(["en", "unknown"])
-            for lang in preferred_langs:
-                backdrops = backdrops_by_lang.get(lang, [])
-                if backdrops:
-                    best_backdrop_url = backdrops[0]["url"]
-                    async with session.get(best_backdrop_url, timeout=aiohttp.ClientTimeout(total=20)) as img_resp:
-                        if img_resp.status == 200:
-                            return await img_resp.read()
-                        else:
-                            raise ValueError(f"Failed To Fetch Backdrop Image: HTTP {img_resp.status}")
-            raise ValueError("No Language-Specific Backdrops Found")
-    except aiohttp.ClientError as e:
-        LOGGER.error(f"Network Error Occurred: {str(e)}")
-    except asyncio.TimeoutError:
-        LOGGER.error("Request Timed Out!")
-    except ValueError as e:
-        LOGGER.error(str(e))
+                
+                return {
+                    "id": data.get("id"),
+                    "title": data.get("title", title),
+                    "original_title": data.get("original_title", ""),
+                    "kind": data.get("type", "Movie").upper(),
+                    "director": await get_director_from_crew(data.get("crew", [])),
+                    "release_date": data.get("release_date", ""),
+                    "vote_average": f"{data['vote_average']:.1f}" if data.get("vote_average") else "N/A",
+                    "vote_count": f"{data['vote_count']:,}" if data.get("vote_count") else "0",
+                    "genres": data.get("genres", []),
+                    "imdb_id": data.get("imdb_id", ""),
+                    "imdb_url": f"https://www.imdb.com/title/{data.get('imdb_id')}/" if data.get("imdb_id") else "",
+                    "overview": data.get("overview", ""),
+                    "poster_url": data.get("poster_url", ""),
+                    "backdrop_url": data.get("backdrop_url", ""),
+                    "backdrops": data.get("backdrops", {}),
+                    "posters": data.get("posters", {}),
+                    "cast": data.get("cast", [])[:5],
+                    "videos": data.get("videos", []),
+                }
+                
     except Exception as e:
-        LOGGER.error(f"Unexpected Error: {str(e)}")
+        LOGGER.error(f"API Fetch Error: {str(e)}")
+        return None
+
+async def get_director_from_crew(crew: list) -> str:
+    directors = [person["name"] for person in crew if person.get("job") == "Director"]
+    return directors[0] if directors else None
+
+def get_trailer_button(tmdb_data: Dict) -> list:
+    videos = tmdb_data.get("videos", [])
+    yt_videos = [v for v in videos if "youtube" in v.get("url", "").lower()]    
+    if yt_videos:
+        return [InlineKeyboardButton("▶️ Watch Trailer", url=yt_videos[0]["url"])]
+    return []
+    
+async def send_with_visual(bot, caption: str, tmdb_data: Dict, search_movie):
+    try:
+        visual_url = await get_best_visual(tmdb_data)
+        get_file = f'https://telegram.me/{temp.U_NAME}?start=getfile-{search_movie}'
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📱 Get File", url=get_file)],
+            get_trailer_button(tmdb_data)
+        ])
+        
+        if visual_url:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(visual_url, timeout=aiohttp.ClientTimeout(total=20)) as img_resp:
+                    if img_resp.status == 200:
+                        img_bytes = await img_resp.read()
+                        photo_file = io.BytesIO(img_bytes)
+                        photo_file.name = await generate_premium_filename(tmdb_data["title"])
+                        
+                        await bot.send_photo(
+                            chat_id=MOVIE_UPDATE_CHANNEL, 
+                            photo=photo_file, 
+                            caption=caption,
+                            parse_mode=ParseMode.HTML,
+                            reply_markup=keyboard
+                        )
+                        return       
+        await bot.send_photo(
+            chat_id=MOVIE_UPDATE_CHANNEL,
+            photo=DEFAULT_IMAGE_URL,
+            caption=caption,
+            parse_mode=ParseMode.HTML,
+            reply_markup=keyboard
+        )       
+    except Exception as e:
+        LOGGER.error(f"Visual Send Error: {e}")
+
+async def get_best_visual(tmdb_data: Dict) -> Optional[str]:
+    backdrops = tmdb_data.get("backdrops", {})
+    posters = tmdb_data.get("posters", {})    
+    by_language = backdrops.get("by_language", {})    
+    original_lang = tmdb_data.get("original_language")
+    if original_lang and by_language.get(original_lang):
+        return by_language[original_lang][0]["url"]    
+    indian_langs = [
+        "hi", "ta", "te", "kn", "ml", "mr", "bn", "gu", "pa", "or", "as", 
+        "ur", "ne"
+    ]
+    for lang in indian_langs:
+        if by_language.get(lang):
+            return by_language[lang][0]["url"]    
+    if by_language.get("en"):
+        return by_language["en"][0]["url"]
+    if by_language.get("unknown"):
+        return by_language["unknown"][0]["url"]    
+    if backdrops.get("all") and backdrops["all"]:
+        return backdrops["all"][0]["url"]
+    if posters.get("all") and posters["all"]:
+        return posters["all"][0]["url"]
+    if tmdb_data.get("poster_url"):
+        return tmdb_data["poster_url"]           
     return None
 
-def generate_unique_id(movie_name):
-    return hashlib.md5(movie_name.encode('utf-8')).hexdigest()[:5]
+async def generate_premium_filename(title: str, extension=".jpg") -> str:
+    clean_title = re.sub(r'[^\w\s-]', '', title)[:20].strip()
+    timestamp = datetime.now().strftime("%y%m%d%H%M")
+    unique_id = hashlib.md5(title.encode()).hexdigest()[:6]
+    return f"silentx_{clean_title}_{timestamp}_{unique_id}{extension}"
 
-async def get_qualities(text):
-    qualities = ["ORG", "org", "hdcam", "HDCAM", "HQ", "hq", "HDRip", "hdrip", 
-                 "camrip", "WEB-DL", "CAMRip", "hdtc", "predvd", "DVDscr", "dvdscr", 
-                 "dvdrip", "HDTC", "dvdscreen", "HDTS", "hdts"]
+async def get_languages(text: str) -> str:
+    found_langs = [lang for lang in CAPTION_LANGUAGES if lang.lower().replace(" ", "") in text.lower().replace(" ", "")]
+    return ", ".join(found_langs[:2]) if found_langs else "Multi-Audio"
+
+async def get_qualities(text): 
+    qualities = ["ORG", "org", "hdcam", "HDCAM", "HQ", "hq", "HDRip", "hdrip", "camrip", "WEB-DL", "CAMRip", "hdtc", "predvd", "DVDscr", "dvdscr", "dvdrip", "HDTC", "dvdscreen", "HDTS", "hdts"]
     return ", ".join([q for q in qualities if q.lower() in text.lower()])
 
-
 async def get_pixels(caption):
-    pixels = ["480p", "480p HEVC", "720p", "720p HEVC", "1080p", "1080p HEVC", "2160p" "2K", "4K"]
+    pixels = ["480p", "480p HEVC", "720p", "720p HEVC", "1080p", "1080p HEVC", "2160p", "2K", "4K"]
     return ", ".join([p for p in pixels if p.lower() in caption.lower()])
 
-
 async def movie_name_format(file_name):
-  clean_filename = re.sub(r'http\S+', '', re.sub(r'@\w+|#\w+', '', file_name).replace('_', ' ').replace('[', '').replace(']', '').replace('(', '').replace(')', '').replace('{', '').replace('}', '').replace('.', ' ').replace('@', '').replace(':', '').replace(';', '').replace("'", '').replace('-', '').replace('!', '')).strip()
-  return clean_filename
-
-
-async def generate_random_filename(extension=".jpg"):
-    now = datetime.now()
-    timestamp = now.strftime("%Y%m%d%H%M%S")
-    sin_value = abs(math.sin(int(timestamp[-5:]))) 
-    random_part = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))   
-    filename = f"silentxbotz_{int(sin_value*10000)}_{random_part}{extension}"
-    return filename
+    clean_filename = re.sub(r'http\S+', '', re.sub(r'@\w+|#\w+', '', file_name).replace('_', ' ').replace('[', '').replace(']', '').replace('(', '').replace(')', '').replace('{', '').replace('}', '').replace('.', ' ').replace('@', '').replace(':', '').replace(';', '').replace("'", '').replace('-', '').replace('!', '')).strip()
+    return clean_filename
