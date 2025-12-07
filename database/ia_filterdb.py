@@ -1,6 +1,7 @@
 from struct import pack
 import re
 import base64
+import asyncio
 from typing import Dict, List
 from pyrogram.file_id import FileId
 from pymongo.errors import DuplicateKeyError
@@ -119,28 +120,38 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
     try:
         regex = re.compile(raw_pattern, flags=re.IGNORECASE)
     except:
-        return []
+        return [], '', 0
     if USE_CAPTION_FILTER:
         filter = {'$or': [{'file_name': regex}, {'caption': regex}]}
     else:
         filter = {'file_name': regex}
     if file_type:
         filter['file_type'] = file_type
-    total_results = await Media.count_documents(filter)
-    if MULTIPLE_DB:
-        total_results += await Media2.count_documents(filter)
+
     if max_results % 2 != 0:
-        logger.info(f"Since max_results Is An Odd Number ({max_results}), Bot Will Use {max_results + 1} As max_results To Make It Even.")
+        LOGGER.info(f"Since max_results Is An Odd Number ({max_results}), Bot Will Use {max_results + 1} As max_results To Make It Even.")
         max_results += 1
-    cursor1 = Media.find(filter).sort('$natural', -1).skip(offset).limit(max_results)
-    files1 = await cursor1.to_list(length=max_results)
+
+    tasks = []
+    tasks.append(Media.count_documents(filter))
+    tasks.append(Media.find(filter).sort('$natural', -1).skip(offset).limit(max_results).to_list(length=max_results))
+
     if MULTIPLE_DB:
-        remaining_results = max_results - len(files1)
-        cursor2 = Media2.find(filter).sort('$natural', -1).skip(offset).limit(remaining_results)
-        files2 = await cursor2.to_list(length=remaining_results)
-        files = files1 + files2
-    else:
-        files = files1
+        tasks.append(Media2.count_documents(filter))
+        tasks.append(Media2.find(filter).sort('$natural', -1).skip(offset).limit(max_results).to_list(length=max_results))
+
+    results = await asyncio.gather(*tasks)
+
+    total_results = results[0]
+    files = results[1]
+
+    if MULTIPLE_DB:
+        total_results += results[2]
+        files2 = results[3]
+        if len(files) < max_results:
+            remaining_results = max_results - len(files)
+            files += files2[:remaining_results]
+
     next_offset = offset + len(files)
     if next_offset >= total_results:
         next_offset = ''
