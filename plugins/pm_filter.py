@@ -1366,7 +1366,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton('♻️ ᴅᴍᴄᴀ', callback_data='disclaimer'),
                     InlineKeyboardButton('👤 ᴀʙᴏᴜᴛ ', callback_data='me')
                 ],[
-			        InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ ᴡɪᴛʜ ʙᴏᴛ 🤑', callback_data="earn")
+			        InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ ᴡɪᴛʜ ʙᴏᴛ 🤑', callback_data="earn"), 
+			        InlineKeyboardButton('sᴜᴘᴘᴏʀᴛ ᴜᴘᴅᴀᴛᴇs 🍁', callback_data="Support")
                 ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await client.edit_message_media(
@@ -1498,6 +1499,22 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 reply_markup=reply_markup,
                 parse_mode=enums.ParseMode.HTML
 			)
+			elif query.data == "Support":
+        buttons = [[
+            InlineKeyboardButton('ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ 🌺', url='https://t.me/Mrn_Officialx'),
+            InlineKeyboardButton('ʀᴇᴀʟɪᴛʏ ʜɪɴᴅɪ ᴛᴠ sʜᴏᴡs 🌺', url='https://t.me/+tmnV0LBQtUg4MjFl')
+		],[
+			InlineKeyboardButton('sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ 🌺', url='https://t.me/+lTO1v9u3v4FhODNl'),
+            InlineKeyboardButton('ʀᴇǫᴜᴇsᴛ ɢʀᴏᴜᴘ 🌺', url='https://t.me/+w3msCmFCw0Y5MDJl')
+		],[
+            InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ ⇋', callback_data='start')					 
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await query.message.edit_text(
+            text=script.SUPPORT_TXT,
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML
+		)
         except Exception as e:
             LOGGER.error(e)
                     
