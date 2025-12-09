@@ -331,4 +331,4 @@ Requested by : {message.from_user.mention}</b>"""
 
     PAGE_TXT = """ᴡʜʏ ᴀʀᴇ ʏᴏᴜ ꜱᴏ ᴄᴜʀɪᴏᴜꜱ ⁉️"""    
    
-    SOURCE_TXT = """<b><blockquote>Nᴏᴛᴇ: </blockquote>\n\n<blockquote>𝐖𝐚𝐧𝐭 𝐀 𝐁𝐨𝐭 𝐋𝐢𝐤𝐞 𝐓𝐡𝐢𝐬:</blockquote>\n\n<blockquote>✭ I ᴡɪʟʟ ᴄʀᴇᴀᴛᴇ ᴏɴᴇ ʙᴏᴛ ғᴏʀ ʏᴏᴜ.\n✭ Cᴏɴᴛᴀᴄᴛ ᴛᴏ ᴛʜᴇ ᴅᴇᴠᴇʟᴏᴘᴇʀ ☟</blockquote></b>"""
+    SOURCE_TXT = """<b>Nᴏᴛᴇ: \n\n𝐖𝐚𝐧𝐭 𝐀 𝐁𝐨𝐭 𝐋𝐢𝐤𝐞 𝐓𝐡𝐢𝐬:\n\n✭ I ᴡɪʟʟ ᴄʀᴇᴀᴛᴇ ᴏɴᴇ ʙᴏᴛ ғᴏʀ ʏᴏᴜ.\n✭ Cᴏɴᴛᴀᴄᴛ ᴛᴏ ᴛʜᴇ ᴅᴇᴠᴇʟᴏᴘᴇʀ ☟</b>"""
