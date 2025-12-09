@@ -332,3 +332,5 @@ Requested by : {message.from_user.mention}</b>"""
     PAGE_TXT = """ᴡʜʏ ᴀʀᴇ ʏᴏᴜ ꜱᴏ ᴄᴜʀɪᴏᴜꜱ ⁉️"""    
    
     SOURCE_TXT = """<b><blockquote>Nᴏᴛᴇ: </blockquote>\n\n<blockquote>𝐖𝐚𝐧𝐭 𝐀 𝐁𝐨𝐭 𝐋𝐢𝐤𝐞 𝐓𝐡𝐢𝐬:</blockquote>\n\n<blockquote>✭ I ᴡɪʟʟ ᴄʀᴇᴀᴛᴇ ᴏɴᴇ ʙᴏᴛ ғᴏʀ ʏᴏᴜ.\n✭ Cᴏɴᴛᴀᴄᴛ ᴛᴏ ᴛʜᴇ ᴅᴇᴠᴇʟᴏᴘᴇʀ ☟</blockquote></b>"""
+
+    SUPPORT_TXT = """<b><blockquote>⚡ ɢʀᴏᴜᴘs & ᴄʜᴀɴɴᴇʟs ɪɴғᴏ ⚡</blockquote>\n\n<blockquote>▫ ᴀʟʟ ɴᴇᴡ ᴍᴏᴠɪᴇs & sᴇʀɪᴇs.\n▫ ғᴀsᴛᴇsᴛ ʙᴏᴛs ᴀʀᴇ ᴀᴅᴅᴇᴅ.\n▫ ғʀᴇᴇ & ᴇᴀsʏ ᴛᴏ ᴜsᴇ.\n▫ 2𝟺x𝟽 sᴇʀᴠɪᴄᴇs ᴀᴠᴀɪʟᴀʙʟᴇ. ⁉️</blockquote></b>"""
