@@ -9,6 +9,7 @@ import hashlib
 import requests
 from info import *
 from utils import *
+from utils import clean_filename
 from logging_helper import LOGGER
 from typing import Optional, Dict, Any
 from datetime import datetime
@@ -63,8 +64,8 @@ async def media(bot, message):
 
 async def send_movie_update(bot, file_name, caption):
     try:
-        file_name = await movie_name_format(file_name)        
-        caption = await movie_name_format(caption)
+        file_name = clean_filename(file_name)
+        caption = clean_filename(caption)
         year_match = re.search(r"\b(19|20)\d{2}\b", caption)
         year = year_match.group(0) if year_match else None      
         season_match = re.search(r"(?i)(?:s|season)0*(\d{1,2})", caption) or re.search(r"(?i)(?:s|season)0*(\d{1,2})", file_name)
@@ -231,7 +232,3 @@ async def get_qualities(text):
 async def get_pixels(caption):
     pixels = ["480p", "480p HEVC", "720p", "720p HEVC", "1080p", "1080p HEVC", "2160p", "2K", "4K"]
     return ", ".join([p for p in pixels if p.lower() in caption.lower()])
-
-async def movie_name_format(file_name):
-    clean_filename = re.sub(r'http\S+', '', re.sub(r'@\w+|#\w+', '', file_name).replace('_', ' ').replace('[', '').replace(']', '').replace('(', '').replace(')', '').replace('{', '').replace('}', '').replace('.', ' ').replace('@', '').replace(':', '').replace(';', '').replace("'", '').replace('-', '').replace('!', '')).strip()
-    return clean_filename

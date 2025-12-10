@@ -20,7 +20,7 @@ from Lucia.util.keepalive import ping_server
 from Lucia.Bot.clients import initialize_clients
 import pyrogram.utils
 from PIL import Image
-import threading, time, requests
+import threading, requests
 from logging_helper import LOGGER
 
 botStartTime = time.time()
@@ -38,12 +38,15 @@ def ping_loop():
             else:
                 LOGGER.error(f"⚠️ Ping Failed: {r.status_code}")
         except Exception as e:
+            # Don't log full exception every time, just error
             LOGGER.error(f"❌ Exception During Ping: {e}")
         time.sleep(120)
-threading.Thread(target=ping_loop, daemon=True).start()
+
+if URL:
+    threading.Thread(target=ping_loop, daemon=True).start()
 
 async def SilentXBotz_start():
-    LOGGER.info('Initalizing Your Bot!')
+    LOGGER.info('Initializing Your Bot!')
     await SilentX.start()
     bot_info = await SilentX.get_me()
     SilentX.username = bot_info.username
@@ -61,15 +64,21 @@ async def SilentXBotz_start():
             LOGGER.info("Import Plugins - " + plugin_name)
     if ON_HEROKU:
         asyncio.create_task(ping_server()) 
-    b_users, b_chats = await db.get_banned()
-    temp.BANNED_USERS = b_users
-    temp.BANNED_CHATS = b_chats
-    await Media.ensure_indexes()
-    if MULTIPLE_DB:
-        await Media2.ensure_indexes()
-        LOGGER.info("Multiple Database Mode On. Now Files Will Be Save In Second DB If First DB Is Full")
-    else:
-        LOGGER.info("Single DB Mode On ! Files Will Be Save In First Database")
+    try:
+        b_users, b_chats = await db.get_banned()
+        temp.BANNED_USERS = b_users
+        temp.BANNED_CHATS = b_chats
+    except Exception as e:
+        LOGGER.error(f"Error fetching banned users/chats: {e}")
+    try:
+        await Media.ensure_indexes()
+        if MULTIPLE_DB:
+            await Media2.ensure_indexes()
+            LOGGER.info("Multiple Database Mode On. Now Files Will Be Save In Second DB If First DB Is Full")
+        else:
+            LOGGER.info("Single DB Mode On ! Files Will Be Save In First Database")
+    except Exception as e:
+        LOGGER.error(f"Error ensuring indexes: {e}")
     me = await SilentX.get_me()
     temp.ME = me.id
     temp.U_NAME = me.username
@@ -82,12 +91,15 @@ async def SilentXBotz_start():
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
     now = datetime.now(tz)
-    time = now.strftime("%H:%M:%S %p")
-    await SilentX.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(temp.B_LINK, today, time))
+    time_str = now.strftime("%H:%M:%S %p")
+    try:
+        await SilentX.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(temp.B_LINK, today, time_str))
+    except Exception as e:
+        LOGGER.error(f"Error sending restart log: {e}")
     try:
         for admin in ADMINS:
-            await SilentX.send_message(chat_id=admin, text=f"<b>๏[-ิ_•ิ]๏ {me.mention} Restarted ✅</code></b>")
-    except:
+            await SilentX.send_message(chat_id=admin, text=f"<b>๏[-ิ_•ิ]๏ {me.mention} Restarted ✅</b>")
+    except Exception:
         pass
     app = web.AppRunner(await web_server())
     await app.setup()

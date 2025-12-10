@@ -47,26 +47,26 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'SilentXBotz_files')
 
 # If MULTIPLE_DB Is True Then Fill DATABASE_URI2 Value Else You Will Get Error.
-MULTIPLE_DB = is_enabled(os.environ.get('MULTIPLE_DB', "False"), False) # Type True For Turn On MULTIPLE DB FUNTION 
+MULTIPLE_DB = is_enabled(os.environ.get('MULTIPLE_DB', "True"), True) # Type True For Turn On MULTIPLE DB FUNTION 
 DATABASE_URI2 = environ.get('DATABASE_URI2', "")
 DB_CHANGE_LIMIT = int(environ.get('DB_CHANGE_LIMIT', "432")) 
 
-GRP_LNK = environ.get('GRP_LNK', 'https://t.me/')
-CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/')
-OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/')
-UPDATE_CHANNEL_LNK = environ.get('UPDATE_CHANNEL_LNK', 'https://t.me/')
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/SilentXBotz')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/SilentXBotz')
+OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/SilentXBotz')
+UPDATE_CHANNEL_LNK = environ.get('UPDATE_CHANNEL_LNK', 'https://t.me/SilentXBotz')
 
-AUTH_CHANNEL = environ.get("AUTH_CHANNEL", "") # add multiple channels here, separated by single space
-AUTH_REQ_CHANNEL = environ.get('AUTH_REQ_CHANNEL', '') # add multiple channels here, separated by single space
+AUTH_CHANNEL = environ.get("AUTH_CHANNEL", "-100") # add multiple channels here, separated by single space
+AUTH_REQ_CHANNEL = environ.get('AUTH_REQ_CHANNEL', '-100')
 
-IS_VERIFY = is_enabled('IS_VERIFY', True)
-LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '100'))
+IS_VERIFY = is_enabled('IS_VERIFY', False)
+LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '-100'))
 LOG_API_CHANNEL = int(environ.get('LOG_API_CHANNEL', '-100'))
 VERIFY_IMG = environ.get("VERIFY_IMG", "https://telegra.ph/file/9ecc5d6e4df5b83424896.jpg")
 
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/")
-TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/")
-TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/")
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/SilentXBotz")
+TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/SilentXBotz")
+TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/SilentXBotz")
 
 SHORTENER_API = environ.get("SHORTENER_API", "")
 SHORTENER_WEBSITE = environ.get("SHORTENER_WEBSITE", "")
@@ -117,7 +117,7 @@ BAD_WORDS = ["Hdhub4u", "cinevood", "skymoviedHD"] #Remove Words From File_Name
 
 LANGUAGES = ["malayalam", "", "tamil", "", "english", "", "hindi", "", "telugu", "", "kannada", "", "gujarati", "", "marathi", "", "punjabi", ""]
 QUALITIES = ["360P", "", "480P", "", "720P", "", "1080P", "", "1440P", "", "2160P", ""]
-SEASONS = ["s01" , "s02" , "s03" , "s04", "s05" , "s06" , "s07" , "s08" , "s09" , "s10"]
+SEASONS = ["Season 1", "Season 2", "Season 3", "Season 4", "Season 5", "Season 6", "Season 7", "Season 8", "Season 9", "Season 10"]
 
 
 NO_PORT = bool(environ.get('NO_PORT', False))
