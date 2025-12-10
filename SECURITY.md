@@ -10,8 +10,8 @@ The following versions of the Auto Filter Bot are currently supported for securi
 
 | Version | Supported          |
 |---------|--------------------|
-| 4.2     | :white_check_mark: |
-| 2.2     | :x:                |
+| 4.3     | :white_check_mark: |
+| 4.2     | :x:                |
 
 We strongly recommend using the latest version (**4.2**) to benefit from security fixes and improvements. Older versions, including **2.2**, are not supported and may contain unpatched vulnerabilities.
 
