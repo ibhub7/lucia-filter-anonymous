@@ -6,7 +6,6 @@ from pyrogram import types
 from aiohttp import web
 from logging_helper import LOGGER
 
-
 class SilentXBot(Client):
     def __init__(self):
         super().__init__(
