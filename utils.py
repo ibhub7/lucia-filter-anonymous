@@ -16,7 +16,6 @@ import string
 from typing import List
 from database.users_chats_db import db
 from bs4 import BeautifulSoup
-import requests
 import aiohttp
 from shortzy import Shortzy
 import http.client
@@ -26,6 +25,8 @@ from logging_helper import LOGGER
 BTN_URL_REGEX = re.compile(
     r"(\[([^\[]+?)\]\((buttonurl|buttonalert):(?:/{0,2})(.+?)(:same)?\))"
 )
+
+BAD_WORDS_REGEX = re.compile('|'.join(map(re.escape, BAD_WORDS)), flags=re.IGNORECASE) if BAD_WORDS else None
 
 imdb = Cinemagoer() 
 BANNED = {}
@@ -181,7 +182,9 @@ async def get_poster(query, bulk=False, id=False, file=None):
                 year = list_to_str(year[:1]) 
         else:
             year = None
-        movieid = imdb.search_movie(title.lower(), results=10)
+
+        movieid = await asyncio.to_thread(imdb.search_movie, title.lower(), results=10)
+
         if not movieid:
             return None
         if year:
@@ -198,7 +201,9 @@ async def get_poster(query, bulk=False, id=False, file=None):
         movieid = movieid[0].movieID
     else:
         movieid = query
-    movie = imdb.get_movie(movieid)
+
+    movie = await asyncio.to_thread(imdb.get_movie, movieid)
+
     if movie.get("original air date"):
         date = movie["original air date"]
     elif movie.get("year"):
@@ -244,19 +249,6 @@ async def get_poster(query, bulk=False, id=False, file=None):
         'rating': str(movie.get("rating")),
         'url':f'https://www.imdb.com/title/tt{movieid}'
     }
-    
-async def search_gagala(text):
-    usr_agent = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-        'Chrome/61.0.3163.100 Safari/537.36'
-        }
-    text = text.replace(" ", '+')
-    url = f'https://www.google.com/search?q={text}'
-    response = requests.get(url, headers=usr_agent)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'html.parser')
-    titles = soup.find_all( 'h3' )
-    return [title.getText() for title in titles]
 
 async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shortener=False):
     settings = await get_settings(grp_id)
@@ -334,15 +326,15 @@ def extract_request_content(message_text):
     return message_text.strip()
 
 def clean_filename(file_name):
-    prohibitedWords = BAD_WORDS
-    _regex = re.compile('|'.join(map(re.escape, prohibitedWords)))
-    file_name = _regex.sub("", file_name)
-
+    if not file_name:
+        return ""
+    if BAD_WORDS_REGEX:
+        file_name = BAD_WORDS_REGEX.sub("", file_name)
+    file_name = re.sub(r'http\S+|www\.\S+|@\w+|#\w+', '', file_name)
     file_name = re.sub(r'[_\-\.\+]', ' ', file_name)
-    file_name = re.sub(r'http\S+|@\w+|#\w+|\[\w+\]|www\.\S+', '', file_name)
+    file_name = re.sub(r"[^a-zA-Z0-9\s]", " ", file_name)
     file_name = re.sub(r'[^\x00-\x7F]+', '', file_name)
-    file_name = re.sub(r'[()\{\}\[\]:;\'\!\?\"]', '', file_name)
-
+    file_name = re.sub(r'\s+', ' ', file_name).strip()
     return file_name
 
 async def replace_words(string):
@@ -411,6 +403,16 @@ def list_to_str(k):
         return ' '.join(f'{elem}, ' for elem in k)
     else:
         return ' '.join(f'{elem}, ' for elem in k)
+
+def clean_search_query(query):
+    pattern = r'\(s0\?(\d+)\|season\\s\*(\d+)\)\(\?:e\\d\+\)\?'
+    def replacer(match):
+        num = match.group(1) or match.group(2)
+        return f"Season {num}"
+    cleaned = re.sub(pattern, replacer, query, flags=re.IGNORECASE)
+    pattern2 = r's0\?(\d+)\(\?:e\\d\+\)\?'
+    cleaned = re.sub(pattern2, lambda m: f"Season {m.group(1)}", cleaned, flags=re.IGNORECASE)
+    return cleaned
 
 def last_online(from_user):
     time = ""
@@ -635,6 +637,7 @@ async def get_seconds(time_string):
         return 0
     
 async def get_cap(settings, remaining_seconds, files, query, total_results, search, offset):
+    search = clean_search_query(search)
     if settings["imdb"]:
         IMDB_CAP = temp.IMDB_CAP.get(query.from_user.id)
         if IMDB_CAP:
