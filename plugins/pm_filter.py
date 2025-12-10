@@ -1360,13 +1360,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         buttons = [[
                     InlineKeyboardButton('+ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ +', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true')
                 ],[
-                    InlineKeyboardButton('🧧 ᴛʀᴇɴᴅɪɴɢ ', callback_data="topsearch"),
-                    InlineKeyboardButton('🎟️ ᴜᴘɢʀᴀᴅᴇ ', callback_data="premium"),
+                    InlineKeyboardButton('🧧 ᴛʀᴇɴᴅɪɴɢ', callback_data="topsearch"),
+                    InlineKeyboardButton('🎟️ ᴜᴘɢʀᴀᴅᴇ', callback_data="premium"),
                 ],[
                     InlineKeyboardButton('♻️ ᴅᴍᴄᴀ', callback_data='disclaimer'),
-                    InlineKeyboardButton('👤 ᴀʙᴏᴜᴛ ', callback_data='me')
+                    InlineKeyboardButton('👤 ᴀʙᴏᴜᴛ', callback_data='me')
                 ],[
-			        InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ ᴡɪᴛʜ ʙᴏᴛ 🤑', callback_data="earn")
+                    InlineKeyboardButton('🚫 ᴇᴀʀɴ ᴍᴏɴᴇʏ ᴡɪᴛʜ ʙᴏᴛ 🚫', callback_data="earn")
                 ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await client.edit_message_media(
@@ -1497,7 +1497,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 text=script.EARN_INFO.format(temp.B_LINK),
                 reply_markup=reply_markup,
                 parse_mode=enums.ParseMode.HTML
-			)
+            ) 
         except Exception as e:
             LOGGER.error(e)
                     
@@ -1505,12 +1505,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         buttons = [[
             InlineKeyboardButton ('🎁 sᴏᴜʀᴄᴇ', callback_data='source'),
         ],[
-			InlineKeyboardButton('ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ 🌺', url='https://t.me/Mrn_Officialx'),
-            InlineKeyboardButton('ʀᴇᴀʟɪᴛʏ ʜɪɴᴅɪ ᴛᴠ sʜᴏᴡs 🌺', url='https://t.me/+tmnV0LBQtUg4MjFl')
-		],[
-			InlineKeyboardButton('sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ 🌺', url='https://t.me/+lTO1v9u3v4FhODNl'),
-            InlineKeyboardButton('ʀᴇǫᴜᴇsᴛ ɢʀᴏᴜᴘ 🌺', url='https://t.me/+w3msCmFCw0Y5MDJl')
-		],[
             InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ ⇋', callback_data='start')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
