@@ -14,6 +14,7 @@ getLogger("aiohttp").setLevel(ERROR)
 getLogger("pymongo").setLevel(WARNING)
 getLogger("aiohttp").setLevel(WARNING)
 
+
 basicConfig(
     format="[%(asctime)s] [%(levelname)s] - %(message)s",  
     datefmt="%d-%b-%y %I:%M:%S %p",
