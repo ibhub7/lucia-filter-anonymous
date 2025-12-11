@@ -213,7 +213,7 @@ async def filter_selection_handler(client, query, prefix):
     if value == "homepage":
         search = FRESH.get(key)
     else:
-		search = BUTTONS.get(key) if BUTTONS.get(key) else FRESH.get(key)
+        search = BUTTONS.get(key) if BUTTONS.get(key) else FRESH.get(key)
     if not search:
         await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
         return
@@ -226,7 +226,7 @@ async def filter_selection_handler(client, query, prefix):
         elif prefix == "fl":
             category_list = [x for x in LANGUAGES if x]
         elif prefix == "fs":
-			category_list = [x for x in SEASONS if x]
+            category_list = [x for x in SEASONS if x]
         is_present = False
         match_pattern = ""
         if prefix == "fs":
