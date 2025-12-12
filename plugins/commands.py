@@ -20,6 +20,7 @@ from database.ia_filterdb import *
 from database.users_chats_db import db
 from info import *
 from utils import *
+from .fsub_helper import check_force_subscription, is_req_subscribed, is_subscribed
 
 TIMEZONE = "Asia/Kolkata"
 BATCH_FILES = {}
@@ -172,42 +173,37 @@ async def start(client, message):
     try:
         settings = await get_settings(int(data.split("_", 2)[1]))
         fsub_id_list = settings.get('fsub_id', [])
-        btn = []
-        i = 1
         fsub_id_list = fsub_id_list + AUTH_CHANNEL if AUTH_CHANNEL else fsub_id_list
-        fsub_id_list = fsub_id_list + AUTH_REQ_CHANNEL if AUTH_REQ_CHANNEL else fsub_id_list
-        
+        fsub_id_list = fsub_id_list + AUTH_REQ_CHANNEL if AUTH_REQ_CHANNEL else fsub_id_list       
         if fsub_id_list:
             fsub_ids = []
             for chnl in fsub_id_list:
                 if chnl not in fsub_ids:
                     fsub_ids.append(chnl)
-                else:
-                    continue
-                try:
-                    channel_name = (await client.get_chat(chnl)).title or f"Update Channel"
-                except Exception:
-                    channel_name = f"Update Channel"
-                if AUTH_REQ_CHANNEL and chnl in AUTH_REQ_CHANNEL and not await is_req_subscribed(client, message, chnl):
-                    try:
-                        invite_link = await client.create_chat_invite_link(chnl, creates_join_request=True)
-                    except ChatAdminRequired:
-                        LOGGER.error("Bot Ko AUTH_CHANNEL Per Admin Bana Bhai Pahile 🤧")
-                        return
-                    btn.append([
-                        InlineKeyboardButton(f"⛔️ {i}. {channel_name} ⛔️", url=invite_link.invite_link)
-                    ])
-                elif chnl not in AUTH_REQ_CHANNEL and not await is_subscribed(client, message.from_user.id, chnl):
-                    try:
-                        invite_link = await client.create_chat_invite_link(chnl)
-                    except ChatAdminRequired:
-                        LOGGER.error("Bot Ko AUTH_CHANNEL Per Admin Bana Bhai Pahile 🤧")
-                        return
-                    btn.append([
-                        InlineKeyboardButton(f"⛔️ {i}. {channel_name} ⛔️", url=invite_link.invite_link)
-                    ])
-                i += 1
+            tasks = []
+            for chnl in fsub_ids:
+                is_req_channel = AUTH_REQ_CHANNEL and chnl in AUTH_REQ_CHANNEL
+                tasks.append(
+                    check_force_subscription(
+                        client,
+                        message.from_user.id,
+                        chnl,
+                        is_req_channel,
+                        is_subscribed,
+                        is_req_subscribed,
+                        message
+                    )
+                )
 
+            results = await asyncio.gather(*tasks)
+            btn = []
+            i = 1
+            for res in results:
+                if res:
+                    btn.append([
+                        InlineKeyboardButton(f"⛔️ {i}. {res['title']} ⛔️", url=res['url'])
+                    ])
+                    i += 1
             if btn:
                 if message.command[1] != "subscribe":
                     btn.append([InlineKeyboardButton("♻️ ᴛʀʏ ᴀɢᴀɪɴ ♻️", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
