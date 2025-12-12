@@ -1,9 +1,8 @@
-from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
+from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid, MessageNotModified
 from info import  *
 from imdb import Cinemagoer 
 import asyncio
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from pyrogram import enums
 from typing import Union
 from Script import script
@@ -53,30 +52,6 @@ class temp(object):
     IMDB_CAP = {}
     VERIFICATIONS = {}
 
-async def is_req_subscribed(bot, query, chnl):
-    if await db.find_join_req(query.from_user.id, chnl):
-        return True
-    try:
-        user = await bot.get_chat_member(chnl, query.from_user.id)
-        if user.status != enums.ChatMemberStatus.BANNED:
-            return True
-    except UserNotParticipant:
-        pass
-    except Exception as e:
-        LOGGER.error(e)
-    return False
-
-async def is_subscribed(bot, user_id, channel_id):
-    try:
-        user = await bot.get_chat_member(channel_id, user_id)
-    except UserNotParticipant:
-        pass
-    except Exception as e:
-        pass
-    else:
-        if user.status != enums.ChatMemberStatus.BANNED:
-            return True
-    return False
     
 async def is_check_admin(bot, chat_id, user_id):
     try:
