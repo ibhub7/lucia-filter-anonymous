@@ -12,7 +12,7 @@ class script(object):
     ABOUT_TXT = """<b>╭───────────⍟
 ├🤖 ᴍʏ ɴᴀᴍᴇ : <a href=https://t.me/{}>{}</a>
 ├👑 ᴏᴡɴᴇʀ : <a href={}>ᴏᴡɴᴇʀ</a>
-├👨‍💻 ᴅᴇᴠᴇʟᴏᴘᴇʀ : <a href=https://github.com/lntechnical2>ʟɴ ᴛᴇᴄʜɴɪᴄᴀʟ</a>
+├👨‍💻 ᴅᴇᴠᴇʟᴏᴘᴇʀ : <a href=https://t.me/SilentXBotz>ꜱɪʟᴇɴᴛxʙᴏᴛᴢ </a>
 ├📕 ʟɪʙʀᴀʀʏ : <a href=https://github.com/pyrogram>ᴘʏʀᴏɢʀᴀᴍ</a>
 ├✏️ ʟᴀɴɢᴜᴀɢᴇ : <a href=https://www.python.org>ᴘʏᴛʜᴏɴ 3</a>
 ├💾 ᴅᴀᴛᴀʙᴀꜱᴇ : <a href=https://cloud.mongodb.com>ᴍᴏɴɢᴏ ᴅʙ</a>
@@ -30,7 +30,7 @@ class script(object):
 
 ✨ ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ʏᴏᴜʀ ꜱᴜᴘᴘᴏʀᴛ!</b>"""
            
-    MULTI_STATUS_TXT = """<b>╭─[ ⚡ ꜱᴇʀᴠᴇʀ ꜱᴛᴀᴛᴜꜱ ⚡ ]─⍟</b>
+    MULTI_STATUS_TXT = """<b>╭─[ ⚡ ᴅᴀᴛᴀʙᴀsᴇ ꜱᴛᴀᴛᴜꜱ ⚡ ]─⍟</b>
 │
 <b>├─[ ᴅᴀᴛᴀʙᴀsᴇ 1 ]─⍟</b>
 ├⋟ 👤 ᴜsᴇʀs ⋟ <code>{}</code>
@@ -53,7 +53,7 @@ class script(object):
 ├⋟ 📊 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ: <code>{}</code>
 <b>╰──────────────────────⍟</b>"""
 
-    STATUS_TXT = """<b>╭─[ ⚡ ꜱᴇʀᴠᴇʀ ꜱᴛᴀᴛᴜꜱ ⚡ ]─⍟</b>
+    STATUS_TXT = """<b>╭─[ ⚡ ᴅᴀᴛᴀʙᴀsᴇ ꜱᴛᴀᴛᴜꜱ ⚡ ]─⍟</b>
 │
 <b>├─[ ᴅᴀᴛᴀʙᴀsᴇ ]─⍟</b>
 ├⋟ 👤 ᴜsᴇʀs ⋟ <code>{}</code>
@@ -238,10 +238,10 @@ class script(object):
     NORSLTS = """ 
 #NoResults
 
-Iᴅ : <code>{}</code>
-Nᴀᴍᴇ : {}
+ɪᴅ : <code>{}</code>
+ɴᴀᴍᴇ : {}
 
-Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
+ᴍᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
     CAPTION = """<b>{file_name}\n
 📤 ᴜᴘʟᴏᴀᴅᴇᴅ ʙʏ: <a href="https://t.me/SilentXBotz">SɪʟᴇɴᴛXʙᴏᴛᴢ</a></b>"""
@@ -315,10 +315,11 @@ Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
 • /set_time_2 - <code>ꜱᴇᴛ 2ɴᴅ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ ᴛɪᴍᴇ</code>
 • /set_log_channel - <code>ꜱᴇᴛ ʟᴏɢ ᴄʜᴀɴɴᴇʟ</code>
 • /set_fsub - <code>ꜱᴇᴛ ꜰᴏʀᴄᴇ ꜱᴜʙ</code>
+• /reload - <code>ᴄᴏɴɴᴇᴄᴛ ʏᴏᴜʀ ɢʀᴏᴜᴘ</code>
 • /remove_fsub - <code>ʀᴇᴍᴏᴠᴇ ꜰᴏʀᴄᴇ ꜱᴜʙ</code>
 • /reset_group - <code>ʀᴇꜱᴇᴛ ꜱᴇᴛᴛɪɴɢꜱ</code>
 • /details - <code>ᴄʜᴇᴄᴋ ꜱᴇᴛᴛɪɴɢꜱ</code></b>"""
 
     PAGE_TXT = """ᴡʜʏ ᴀʀᴇ ʏᴏᴜ ꜱᴏ ᴄᴜʀɪᴏᴜꜱ ⁉️"""    
    
-    SOURCE_TXT = """<b>ՏOᑌᖇᑕᗴ ᑕOᗪᗴ :</b> 👇\nThis Is An Open-Source Project. You Can Use It Freely, But Selling The Source Code Is Strictly Prohibited."""
+    SOURCE_TXT = """<b>𝖲𝖮𝖴𝖱𝖢𝖤 𝖢𝖮𝖣𝖤 :</b> 👇\nᴛʜɪꜱ ɪꜱ ᴀɴ ᴏᴘᴇɴ-ꜱᴏᴜʀᴄᴇ ᴘʀᴏᴊᴇᴄᴛ. ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ɪᴛ ꜰʀᴇᴇʟʏ, ʙᴜᴛ ꜱᴇʟʟɪɴɢ ᴛʜᴇ ꜱᴏᴜʀᴄᴇ ᴄᴏᴅᴇ ɪꜱ ꜱᴛʀɪᴄᴛʟʏ ᴘʀᴏʜɪʙɪᴛᴇᴅ."""
