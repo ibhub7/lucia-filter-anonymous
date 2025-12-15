@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://github.com/NBBotz/Images/blob/main/Lucia.jpg">
+  <img src="https://github.com/NBBotz/Images/blob/main/Lucia-Filter-Bot.jpeg">
 </p>
 
 <h1 align="center">Lucia Filter Bot</h1>
 
 <p align="center">
-  <a href="https://t.me/SXBSupport">
+  <a href="https://t.me/SilentXBotz_Support">
     <img src="https://img.shields.io/badge/Join-Support%20Group-blue?style=for-the-badge&logo=telegram">
   </a>
   <a href="http://t.me/Lucia_Filter_Bot">
@@ -31,22 +31,18 @@
 - 📌 Premium Expired Reminder.
 - 🔥 Telegram Star Payment Method
 
-# New Version Released - v4.3
-- Improved Code Structure  
-- Enhanced Regex Patterns  
-- Optimized Performance ✅
+# New Version Released - V4.2
+- Now Group Owners Change There All Settings From Callback Button ✅
+- Group Owners Can Manage Groups From Bot PM.
+- Added /reload Command 
+- UI Change
+- New Channel Update Theme
+- Added Support Of Streming Only For Premium Users
+- Now Owner Can Reset All Connect Groups Settings 
 
-# What’s New ?
-- Group Owners Can Now Change All Settings Using The Callback Button ✅  
-- Group Owners Can Manage Their Groups From The Bot’s PM  
-- Added /Reload Command  
-- Updated UI Design  
-- Introduced New Channel Update Theme  
-- Added Streaming Support (Premium Users Only)  
-- Owners Can Now Reset All Connected Group Settings
 
 ## Variables
-* `BOT_TOKEN`: Create A Bot Using [@BotFather](https://telegram.dog/Bot)
+* `BOT_TOKEN`: Create A Bot Using [@BotFather](https://telegram.dog/BotFather), and get the Telegram API token.
 * `API_ID`: Get This Value From [telegram.org](https://my.telegram.org/apps)
 * `API_HASH`: Get This Value From [telegram.org](https://my.telegram.org/apps)
 * `ADMINS`: ID Of Admins. (Multiple admins can be used separated by space)
@@ -59,7 +55,71 @@
 * `FQDN`: Make A Veriable On Your Deploying Plartform AndAdd You Deployed Bot App Link
 * `AUTH_CHANNEL`: ID of force subscribe channels (Multiple channels can be used separated by space)
 * `CHANNELS`: Username or ID of your files channels (Multiple channels can be used separated by space)
-*  Before Deploying The Bot Fill All Veriables. Check [info.py](https://github.com/NBBotz/Auto-Filter-Bot/blob/SilentXBotz/info.py) For All Veriables.
+*  Before Deploying The Bot Fill All Veriables. Check [info.py](https://github.com/NBBotz/Auto_Filter_Bot/blob/SilentXBotz/info.py) For All Veriables.
+
+## 🤖 Bot Commands
+
+### 👤 General Commands
+- `/start` - Start the bot
+- `/myplan` - Check your premium plan status
+- `/plan` - View available premium plans
+- `/redeem` - Redeem a premium code
+- `/alive` - Check if the bot is active
+- `/ping` - Check bot latency
+- `/system` - View system statistics
+- `/top_search` - View top searched queries
+- `/trendlist` - View trending search list
+- `/details` - View current group settings
+- `/movies` - List recent movies
+- `/series` - List recent series
+- `/id` - Get your User ID or Chat ID
+- `/info` - Get detailed user information
+
+### 👥 Group Commands
+- `/settings` - Open settings menu (Group Admin only)
+- `/reload` - Reload group connection (Group Admin only)
+- `/request` or `#request` - Request a movie or series
+- `/reset_group` - Reset group settings to default (Group Admin only)
+- `/set_fsub` - Set Force Subscribe channel (Group Admin only)
+- `/remove_fsub` - Remove Force Subscribe channel (Group Admin only)
+- `/group_cmd` - Show available group commands
+
+### 🛠 Admin Commands
+- `/logs` - Get the bot log file
+- `/delete` - Delete a file from the database
+- `/deleteall` - Delete all indexed files
+- `/send` - Send a message to a specific user
+- `/deletefiles` - Delete multiple files by keyword
+- `/pm_search` - Enable/Disable PM search
+- `/movie_update` - Enable/Disable movie update notifications
+- `/maintenance` - Enable/Disable maintenance mode
+- `/restart` - Restart the bot
+- `/admin_cmd` - Show all admin commands
+- `/resetall` - Reset settings for all groups
+- `/dropgroups` - Drop the groups collection
+- `/remove_premium` - Remove premium status from a user
+- `/get_premium` - Get premium user details
+- `/add_premium` - Add premium status to a user
+- `/premium_users` - List all premium users
+- `/setskip` - Set skip count for indexing
+- `/delreq` - Delete join requests
+- `/add_redeem` - Create a redeem code
+- `/clearcodes` - Clear all redeem codes
+- `/allcodes` - List all redeem codes
+- `/commands` - Show command list
+- `/leave` - Leave a specific chat
+- `/disable` - Disable the bot in a chat
+- `/enable` - Enable the bot in a chat
+- `/stats` - View bot statistics
+- `/invite` - Generate an invite link
+- `/ban` - Ban a user
+- `/unban` - Unban a user
+- `/users` - List all users
+- `/chats` - List all chats
+- `/broadcast` - Broadcast a message to all users
+- `/grp_broadcast` - Broadcast a message to all groups
+- `/clear_junk` - Clear junk data
+- `/junk_group` - Clear junk groups
 
 ## 🚀 Deployment Methods
 
@@ -71,7 +131,7 @@ Choose A Deployment Method Below And Get Your Bot Running Instantly!
 Click The Button Below To Instantly Deploy Your Bot On **Heroku**.  
 
 <p align="center">
-  <a href="https://heroku.com/deploy?template=https://github.com/NBBotz/Auto-Filter-Bot">
+  <a href="https://heroku.com/deploy?template=https://github.com/NBBotz/Auto_Filter_Bot">
     <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy on Heroku">
   </a>
 </p>
@@ -84,7 +144,7 @@ Click The Button Below To Instantly Deploy Your Bot On **Heroku**.
 Deploy On **Koyeb** In One Click!  
 
 <p align="center">
-  <a href="https://app.koyeb.com/deploy?type=git&repository=https://github.com/NBBotz/Auto-Filter-Bot&branch=SilentXBotz &name=LuciaFilterBot">
+  <a href="https://app.koyeb.com/deploy?type=git&repository=https://github.com/NBBotz/Auto_Filter_Bot&branch=SilentXBotz &name=LuciaFilterBot">
     <img src="https://www.koyeb.com/static/images/deploy/button.svg" alt="Deploy to Koyeb">
   </a>
 </p>
@@ -99,21 +159,20 @@ Run The Following Commands To Deploy The Bot On A **VPS**:
 
 ```bash
 mkdir SilentXBotz && cd SilentXBotz
-git clone https://github.com/NBBotz/Auto-Filter-Bot
-cd Auto-Filter-Bot
+git clone https://github.com/NBBotz/Auto_Filter_Bot
+cd Auto_Filter_Bot
 python3 -m venv venv
 source venv/bin/activate
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 python3 bot.py
 ```
 </details>
 
 
-# Bugs & Fixes 
-
-**This Repository May Contain Some Errors Or Bugs. If You Encounter Any Issues, Please Let Us Know, And We Will Do Our Best To Resolve Them. Or Feel Free To Fix Them And Submit A Pull Request. Contributions Are Always Welcome!**
+# ! Errors 
+- This Repository May Contain Some Errors. If You Encounter Any Issues, Please Let Us Know, And We Will Do Our Best To Resolve Them.
 <p align="center">
-  <a href="https://t.me/SXBSupport">
+  <a href="https://t.me/SilentXBotz_Support">
     <img src="https://img.shields.io/badge/Report-Error-red?style=for-the-badge&logo=telegram" alt="Report Error">
   </a>
 </p>
@@ -121,9 +180,13 @@ python3 bot.py
 
 # 📌 Credits  
 
-- **Base Repository:** [DreamXBotz](https://github.com/DreamXBotz/Auto-Filter-Bot.git)
-- **Thank You To All [Contributors](https://github.com/NBBotz/Auto-Filter-Bot/graphs/contributors) For Your Valuable Contributions To This Repository!**
+- **Base Repository:** [ᴅʀᴇᴀᴍxʙᴏᴛᴢ](https://github.com/DreamXBotz/Auto_Filter_Bot.git)
+- **Thank You To All [Contributors](https://github.com/NBBotz/Auto_Filter_Bot/graphs/contributors) For Your Valuable Contributions To This Repository!**
 
+
+# Bugs & Fixes  
+
+**If You Find Any Bugs Or Errors In This Project, Feel Free To Fix Them And Submit A Pull Request. Contributions Are Always Welcome!**  
 
 ## Disclaimer
 
@@ -131,5 +194,5 @@ This Repository Is Provided For Educational Purposes Only. It Is Not Intended Fo
 
 ## License
 
-This Project Is Licensed Under The [GNU General Public License v3.0](https://github.com/NBBotz/Auto-Filter-Bot/blob/SilentXBotz/LICENSE)
+This Project Is Licensed Under The [GNU General Public License v3.0](https://github.com/NBBotz/Auto_Filter_Bot/blob/SilentXBotz/LICENSE)
 
