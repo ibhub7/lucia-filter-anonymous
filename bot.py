@@ -100,11 +100,7 @@ async def SilentXBotz_start():
     try:
         await SilentX.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(temp.B_LINK, today, time_str))
     except Exception as e:
-        LOGGER.error(f"Error sending restart log: {e}")
-    try:
-        for admin in ADMINS:
-            await SilentX.send_message(chat_id=admin, text=f"<b>๏[-ิ_•ิ]๏ {me.mention} Restarted ✅</b>")
-    except Exception:
+        LOGGER.error(f"Error Sending Restart Log: {e}")
         pass
     app = web.AppRunner(await web_server())
     await app.setup()
