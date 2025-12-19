@@ -105,44 +105,6 @@ def escape_html(text: str) -> str:
         return ""
     return str(text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
-async def fetch_tmdb_data(title: str, year: str = None) -> Optional[Dict[str, Any]]:
-    base_url = "https://image.silentxbotz.tech/api/v2/poster"
-    params = {"title": title.strip()}
-    if year:
-        params["year"] = year
-        
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(base_url, params=params, timeout=aiohttp.ClientTimeout(total=25)) as response:
-                if response.status != 200:
-                    return None
-                data = await response.json()
-                
-                return {
-                    "id": data.get("id"),
-                    "title": data.get("title", title),
-                    "original_title": data.get("original_title", ""),
-                    "kind": data.get("type", "Movie").upper(),
-                    "director": await get_director_from_crew(data.get("crew", [])),
-                    "release_date": data.get("release_date", ""),
-                    "vote_average": f"{data['vote_average']:.1f}" if data.get("vote_average") else "N/A",
-                    "vote_count": f"{data['vote_count']:,}" if data.get("vote_count") else "0",
-                    "genres": data.get("genres", []),
-                    "imdb_id": data.get("imdb_id", ""),
-                    "imdb_url": f"https://www.imdb.com/title/{data.get('imdb_id')}/" if data.get("imdb_id") else "",
-                    "overview": data.get("overview", ""),
-                    "poster_url": data.get("poster_url", ""),
-                    "backdrop_url": data.get("backdrop_url", ""),
-                    "backdrops": data.get("backdrops", {}),
-                    "posters": data.get("posters", {}),
-                    "cast": data.get("cast", [])[:5],
-                    "videos": data.get("videos", []),
-                }
-                
-    except Exception as e:
-        LOGGER.error(f"API Fetch Error: {str(e)}")
-        return None
-
 async def get_director_from_crew(crew: list) -> str:
     directors = [person["name"] for person in crew if person.get("job") == "Director"]
     return directors[0] if directors else None
@@ -189,31 +151,6 @@ async def send_with_visual(bot, caption: str, tmdb_data: Dict, search_movie):
     except Exception as e:
         LOGGER.error(f"Visual Send Error: {e}")
 
-async def get_best_visual(tmdb_data: Dict) -> Optional[str]:
-    backdrops = tmdb_data.get("backdrops", {})
-    posters = tmdb_data.get("posters", {})    
-    by_language = backdrops.get("by_language", {})    
-    original_lang = tmdb_data.get("original_language")
-    if original_lang and by_language.get(original_lang):
-        return by_language[original_lang][0]["url"]    
-    indian_langs = [
-        "hi", "ta", "te", "kn", "ml", "mr", "bn", "gu", "pa", "or", "as", 
-        "ur", "ne"
-    ]
-    for lang in indian_langs:
-        if by_language.get(lang):
-            return by_language[lang][0]["url"]    
-    if by_language.get("en"):
-        return by_language["en"][0]["url"]
-    if by_language.get("unknown"):
-        return by_language["unknown"][0]["url"]    
-    if backdrops.get("all") and backdrops["all"]:
-        return backdrops["all"][0]["url"]
-    if posters.get("all") and posters["all"]:
-        return posters["all"][0]["url"]
-    if tmdb_data.get("poster_url"):
-        return tmdb_data["poster_url"]           
-    return None
 
 async def generate_premium_filename(title: str, extension=".jpg") -> str:
     clean_title = re.sub(r'[^\w\s-]', '', title)[:20].strip()
