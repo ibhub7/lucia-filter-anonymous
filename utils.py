@@ -4,7 +4,7 @@ from imdb import Cinemagoer
 import asyncio
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import enums
-from typing import Union
+from typing import Union, Optional, Dict, Any
 from Script import script
 import pytz
 import random 
@@ -225,6 +225,70 @@ async def get_poster(query, bulk=False, id=False, file=None):
         'url':f'https://www.imdb.com/title/tt{movieid}'
     }
 
+async def fetch_tmdb_data(title: str, year: str = None) -> Optional[Dict[str, Any]]:
+    base_url = "https://image.silentxbotz.tech/api/v2/poster"
+    params = {"title": title.strip()}
+    if year:
+        params["year"] = year
+        
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(base_url, params=params, timeout=aiohttp.ClientTimeout(total=25)) as response:
+                if response.status != 200:
+                    return None
+                data = await response.json()
+                
+                return {
+                    "id": data.get("id"),
+                    "title": data.get("title", title),
+                    "original_title": data.get("original_title", ""),
+                    "original_language": data.get("original_language", "en"),
+                    "kind": data.get("type", "Movie").upper(),
+                    "director": await get_director_from_crew(data.get("crew", [])),
+                    "release_date": data.get("release_date", ""),
+                    "vote_average": f"{data['vote_average']:.1f}" if data.get("vote_average") else "N/A",
+                    "vote_count": f"{data['vote_count']:,}" if data.get("vote_count") else "0",
+                    "genres": data.get("genres", []),
+                    "imdb_id": data.get("imdb_id", ""),
+                    "imdb_url": f"https://www.imdb.com/title/{data.get('imdb_id')}/" if data.get("imdb_id") else "",
+                    "overview": data.get("overview", ""),
+                    "poster_url": data.get("poster_url", ""),
+                    "backdrop_url": data.get("backdrop_url", ""),
+                    "backdrops": data.get("backdrops", {}),
+                    "posters": data.get("posters", {}),
+                    "cast": data.get("cast", [])[:5],
+                    "videos": data.get("videos", []),
+                }
+                
+    except Exception as e:
+        LOGGER.error(f"API Fetch Error: {str(e)}")
+        return None
+
+async def get_director_from_crew(crew: list) -> str:
+    directors = [person["name"] for person in crew if person.get("job") == "Director"]
+    return directors[0] if directors else None
+
+async def get_best_visual(tmdb_data: Dict) -> Optional[str]:
+    backdrops = tmdb_data.get("backdrops", {})
+    by_language = backdrops.get("by_language", {})    
+    original_lang = tmdb_data.get("original_language")
+    if original_lang and by_language.get(original_lang):
+        return by_language[original_lang][0]["url"]    
+    indian_langs = [
+        "hi", "ta", "te", "kn", "ml", "mr", "bn", "gu", "pa", "or", "as", 
+        "ur", "ne"
+    ]
+    for lang in indian_langs:
+        if by_language.get(lang):
+            return by_language[lang][0]["url"]    
+    if by_language.get("en"):
+        return by_language["en"][0]["url"]
+    if by_language.get("unknown"):
+        return by_language["unknown"][0]["url"]    
+    if backdrops.get("all") and backdrops["all"]:
+        return backdrops["all"][0]["url"]
+    return None
+    
 async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shortener=False):
     settings = await get_settings(grp_id)
     if is_third_shortener:             
