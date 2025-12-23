@@ -1291,13 +1291,16 @@ async def auto_filter(client, msg, spoll=False):
     TEMPLATE = script.IMDB_TEMPLATE_TXT    
     poster_url = None
     if imdb:
-        tmdb_data = await fetch_tmdb_data(search, imdb.get('year'))
-        if tmdb_data:
-            backdrop_url = await get_best_visual(tmdb_data)
-            if backdrop_url:
-                poster_url = backdrop_url        
-        if not poster_url:
-            poster_url = imdb.get('poster')    
+        if IS_LANDSCAPE_POSTER:
+            tmdb_data = await fetch_tmdb_data(search, imdb.get('year'))
+            if tmdb_data:
+                backdrop_url = await get_best_visual(tmdb_data)
+                if backdrop_url:
+                    poster_url = backdrop_url        
+            if not poster_url:
+                poster_url = imdb.get('poster')  
+        else:
+            poster_url = imdb.get('poster')
     if imdb:
         cap = TEMPLATE.format(
             qurey=search,
