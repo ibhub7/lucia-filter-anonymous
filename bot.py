@@ -1,7 +1,4 @@
 import sys
-import glob
-import importlib
-from pathlib import Path
 from pyrogram import Client, idle, __version__
 from pyrogram.raw.all import layer
 import time
@@ -24,8 +21,6 @@ import threading, requests
 from logging_helper import LOGGER
 
 botStartTime = time.time()
-ppath = "plugins/*.py"
-files = glob.glob(ppath)
 
 pyrogram.utils.MIN_CHANNEL_ID = -1009147483647
 
@@ -38,7 +33,6 @@ def ping_loop():
             else:
                 LOGGER.error(f"⚠️ Ping Failed: {r.status_code}")
         except Exception as e:
-            # Don't log full exception every time, just error
             LOGGER.error(f"❌ Exception During Ping: {e}")
         time.sleep(120)
 
@@ -51,17 +45,11 @@ async def SilentXBotz_start():
     bot_info = await SilentX.get_me()
     SilentX.username = bot_info.username
     await initialize_clients()
-    for name in files:
-        with open(name) as a:
-            patt = Path(a.name)
-            plugin_name = patt.stem.replace(".py", "")
-            plugins_dir = Path(f"plugins/{plugin_name}.py")
-            import_path = "plugins.{}".format(plugin_name)
-            spec = importlib.util.spec_from_file_location(import_path, plugins_dir)
-            load = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(load)
-            sys.modules["plugins." + plugin_name] = load
-            LOGGER.info("Import Plugins - " + plugin_name)
+    if 0 in SilentX.dispatcher.groups:
+        all_handlers = list(SilentX.dispatcher.groups[0])
+        for i, handler in enumerate(all_handlers):
+            SilentX.dispatcher.remove_handler(handler, group=0)
+            SilentX.dispatcher.add_handler(handler, group=i)
     if ON_HEROKU:
         asyncio.create_task(ping_server()) 
     try:
@@ -91,7 +79,7 @@ async def SilentXBotz_start():
     temp.B_LINK = me.mention
     SilentX.username = '@' + me.username
     SilentX.loop.create_task(check_expired_premium(SilentX))
-    LOGGER.info(f"{me.first_name} with Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+    LOGGER.info(f"{me.first_name} with Pyrofork v{__version__} (Layer {layer}) started on {me.username}.")
     LOGGER.info(script.LOGO)
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
