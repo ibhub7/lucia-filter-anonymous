@@ -237,6 +237,16 @@ async def fetch_tmdb_data(title: str, year: str = None) -> Optional[Dict[str, An
                 if response.status != 200:
                     return None
                 data = await response.json()
+
+                raw_director = data.get("director")
+                if isinstance(raw_director, list):
+                    director = ", ".join([str(x) for x in raw_director if x])
+                elif isinstance(raw_director, str):
+                    director = raw_director
+                else:
+                    director = None
+
+                director = director if director else ""    
                 
                 return {
                     "id": data.get("id"),
@@ -244,7 +254,7 @@ async def fetch_tmdb_data(title: str, year: str = None) -> Optional[Dict[str, An
                     "original_title": data.get("original_title", ""),
                     "original_language": data.get("original_language", "en"),
                     "kind": data.get("type", "Movie").upper(),
-                    "director": await get_director_from_crew(data.get("crew", [])),
+                    "director": director,
                     "release_date": data.get("release_date", ""),
                     "vote_average": f"{data['vote_average']:.1f}" if data.get("vote_average") else "N/A",
                     "vote_count": f"{data['vote_count']:,}" if data.get("vote_count") else "0",
@@ -263,10 +273,6 @@ async def fetch_tmdb_data(title: str, year: str = None) -> Optional[Dict[str, An
     except Exception as e:
         LOGGER.error(f"API Fetch Error: {str(e)}")
         return None
-
-async def get_director_from_crew(crew: list) -> str:
-    directors = [person["name"] for person in crew if person.get("job") == "Director"]
-    return directors[0] if directors else None
 
 async def get_best_visual(tmdb_data: Dict) -> Optional[str]:
     backdrops = tmdb_data.get("backdrops", {})
