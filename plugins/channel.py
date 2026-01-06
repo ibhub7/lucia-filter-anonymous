@@ -83,13 +83,18 @@ async def send_movie_update(bot, file_name, caption):
         tmdb_data = await fetch_tmdb_data(file_name, year)
         search_movie = file_name.replace(" ", "-")
         if not tmdb_data:
-            return          
+            return 
+
+        director = tmdb_data.get("director", "")
+        if not director or not director.strip():
+            director = "N/A"
+            
         full_caption = SILENTX_PREMIUM_UPDATE.format(
             escape_html(tmdb_data["title"]),
             tmdb_data["kind"],
             escape_html(language),
             "MKV" if "mkv" in file_name.lower() else "MP4",
-            escape_html(tmdb_data["director"] or "N/A"),
+            escape_html(director),
             escape_html(tmdb_data["release_date"] or "TBA"),
             tmdb_data["vote_average"],
             tmdb_data["vote_count"],
@@ -104,10 +109,6 @@ def escape_html(text: str) -> str:
     if not text:
         return ""
     return str(text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-
-async def get_director_from_crew(crew: list) -> str:
-    directors = [person["name"] for person in crew if person.get("job") == "Director"]
-    return directors[0] if directors else None
 
 def get_trailer_button(tmdb_data: Dict) -> list:
     videos = tmdb_data.get("videos", [])
