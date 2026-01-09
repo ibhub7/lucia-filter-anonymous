@@ -387,6 +387,9 @@
         let currentSpeedIndex = 2;
         let currentAspectIndex = 0;
 
+        const silentxlink = window.location.href;
+        const silentxcleanlink = silentxlink.replace('/watch/', '/dl/');
+        
         const speeds = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
         const speedLabels = ['0.5x', '0.75x', '1x', '1.25x', '1.5x', '1.75x', '2x'];
 
@@ -633,18 +636,24 @@
         }
 
         function openVLC() {
-            const link = window.location.href.replace(/^https?:\/\//, "");
-            window.location.href = `vlc://${link}`;
+            const link = silentxcleanlink.replace(/^https?:\/\//, "");
+            const playStoreUrl = "https://play.google.com/store/apps/details?id=org.videolan.vlc";
+            const intentUrl = `intent://${link}#Intent;scheme=https;package=org.videolan.vlc;action=android.intent.action.VIEW;type=video/*;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
+            window.location.href = intentUrl;
         }
 
         function openMX() {
-            const link = window.location.href;
-            window.location.href = `intent:${link}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`;
+            const link = silentxcleanlink.replace(/^https?:\/\//, '');
+            const playStoreUrl = "https://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad";
+            const intentUrl = `intent://${link}#Intent;scheme=https;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;type=video/*;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
+            window.location.href = intentUrl;
         }
 
         function openPlayIt() {
-            const link = window.location.href;
-            window.location.href = `intent:${link}#Intent;package=com.playit.videoplayer;action=android.intent.action.VIEW;end`;
+            const link = silentxcleanlink.replace(/^https?:\/\//, '');
+            const playStoreUrl = "https://play.google.com/store/apps/details?id=com.playit.videoplayer";
+            const intentUrl = `intent://${link}#Intent;scheme=https;package=com.playit.videoplayer;action=android.intent.action.VIEW;type=video/*;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
+            window.location.href = intentUrl;
         }
 
         document.addEventListener("DOMContentLoaded", () => {
