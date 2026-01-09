@@ -69,7 +69,6 @@
 - `/system` - View system statistics
 - `/top_search` - View top searched queries
 - `/trendlist` - View trending search list
-- `/details` - View current group settings
 - `/movies` - List recent movies
 - `/series` - List recent series
 - `/id` - Get your User ID or Chat ID
@@ -78,11 +77,9 @@
 ### 👥 Group Commands
 - `/settings` - Open settings menu (Group Admin only)
 - `/reload` - Reload group connection (Group Admin only)
+- `/details` - View current group settings
 - `/request` or `#request` - Request a movie or series
 - `/reset_group` - Reset group settings to default (Group Admin only)
-- `/set_fsub` - Set Force Subscribe channel (Group Admin only)
-- `/remove_fsub` - Remove Force Subscribe channel (Group Admin only)
-- `/group_cmd` - Show available group commands
 
 ### 🛠 Admin Commands
 - `/logs` - Get the bot log file
