@@ -106,8 +106,8 @@ class Database:
         return b_users, b_chats
     
     async def add_chat(self, chat, title):
-        chat = self.new_group(chat, title)
-        await self.grp.insert_one(chat)
+        chat_data = self.new_group(chat, title)
+        await self.grp.update_one({'id': int(chat)}, {'$set': chat_data}, upsert=True)
     
     async def get_chat(self, chat):
         chat = await self.grp.find_one({'id':int(chat)})
@@ -121,7 +121,7 @@ class Database:
         await self.grp.update_one({'id': int(id)}, {'$set': {'chat_status': chat_status}})
         
     async def update_settings(self, id, settings):
-        await self.grp.update_one({'id': int(id)}, {'$set': {'settings': settings}})
+        await self.grp.update_one({'id': int(id)}, {'$set': {'settings': settings}}, upsert=True)
             
     async def get_settings(self, id):
         default = {
@@ -154,9 +154,12 @@ class Database:
         }
         chat = await self.grp.find_one({'id':int(id)})
         if chat and 'settings' in chat:
-            return chat['settings']
+            return {**default, **chat['settings']}
         else:
             return default.copy()
+
+    async def delete_setting(self, id, key):
+        await self.grp.update_one({'id': int(id)}, {'$unset': {f'settings.{key}': ""}})
 
     async def silentx_reset_settings(self):
         try:
