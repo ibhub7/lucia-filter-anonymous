@@ -18,8 +18,7 @@ routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
 async def root_route_handler(request):
-    return web.json_response("Telegram - @SilentXBotz")
-
+    return web.json_response("TG - @SilentXBotz")
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
@@ -38,13 +37,13 @@ async def stream_handler(request: web.Request):
     except FIleNotFound as e:
         raise web.HTTPNotFound(text=e.message)
     except (AttributeError, BadStatusLine, ConnectionResetError):
-        pass
+        return web.Response(status=400, text="Bad Request")
     except Exception as e:
         LOGGER.error(e.with_traceback(None))
-        raise web.HTTPInternalServerError(text="An internal error has occurred.")
+        raise web.HTTPInternalServerError(text=str(e))
 
 @routes.get(r"/{path:\S+}", allow_head=True)
-async def stream_handler(request: web.Request):
+async def stream_handler_media(request: web.Request):
     try:
         path = request.match_info["path"]
         match = re.search(r"^([a-zA-Z0-9_-]{6})(\d+)$", path)
@@ -60,19 +59,19 @@ async def stream_handler(request: web.Request):
     except FIleNotFound as e:
         raise web.HTTPNotFound(text=e.message)
     except (AttributeError, BadStatusLine, ConnectionResetError):
-        pass
+        return web.Response(status=400, text="Bad Request")
     except Exception as e:
         LOGGER.error(e.with_traceback(None))
-        raise web.HTTPInternalServerError(text="An internal error has occurred.")
+        raise web.HTTPInternalServerError(text=str(e))
 
 class_cache = {}
 
 async def media_streamer(request: web.Request, id: int, secure_hash: str):
     range_header = request.headers.get("Range", 0)
-    
+
     index = min(work_loads, key=work_loads.get)
     faster_client = multi_clients[index]
-    
+
     if MULTI_CLIENT:
         LOGGER.info(f"Client {index} is now serving {request.remote}")
 
@@ -86,11 +85,11 @@ async def media_streamer(request: web.Request, id: int, secure_hash: str):
     LOGGER.info("before calling get_file_properties")
     file_id = await tg_connect.get_file_properties(id)
     LOGGER.info("after calling get_file_properties")
-    
+
     if file_id.unique_id[:6] != secure_hash:
-        LOGGER.info(f"Invalid hash for message with ID {id}")
+        LOGGER.error(f"Invalid hash for message with ID {id}")
         raise InvalidHash
-    
+
     file_size = file_id.file_size
 
     if range_header:
