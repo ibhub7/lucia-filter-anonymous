@@ -55,7 +55,8 @@
 * `FQDN`: Make A Veriable On Your Deploying Plartform AndAdd You Deployed Bot App Link
 * `AUTH_CHANNEL`: ID of force subscribe channels (Multiple channels can be used separated by space)
 * `CHANNELS`: Username or ID of your files channels (Multiple channels can be used separated by space)
-*  Before Deploying The Bot Fill All Veriables. Check [info.py](https://github.com/NBBotz/Auto_Filter_Bot/blob/SilentXBotz/info.py) For All Veriables.
+*  Before Deploying The Bot Fill All Veriables. Check [info.py](https://github.com/NBBotz/Auto-Filter-Bot/blob/SilentXBotz/info.py) For All Veriables.
+
 
 ## 🤖 Bot Commands
 
