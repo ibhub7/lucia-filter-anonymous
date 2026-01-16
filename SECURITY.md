@@ -13,7 +13,7 @@ The following versions of the Auto Filter Bot are currently supported for securi
 | 4.3     | :white_check_mark: |
 | 4.2     | :x:                |
 
-We strongly recommend using the latest version (**4.2**) to benefit from security fixes and improvements. Older versions, including **2.2**, are not supported and may contain unpatched vulnerabilities.
+We strongly recommend using the latest version (**4.3**) to benefit from security fixes and improvements. Older versions, including **4.2**, are not supported and may contain unpatched vulnerabilities.
 
 ## Reporting a Vulnerability
 
@@ -21,7 +21,7 @@ If you discover a security vulnerability in the Auto Filter Bot, please report i
 
 To report a vulnerability, please contact us via Telegram:
 
-- **Telegram**: Send a private message to [SilentXBotz_Support](https://t.me/SilentXBotz_support)
+- **Telegram**: Send a private message to [SilentXBotz_Support](https://t.me/SXBSupport)
 
 When reporting, include the following details to help us address the issue quickly:
 
@@ -65,4 +65,4 @@ Thank you for supporting the Auto Filter Bot and keeping our community safe!
 
 ---
 
-*Last updated: June 19, 2025*
+*Last updated: January 16, 2026*
